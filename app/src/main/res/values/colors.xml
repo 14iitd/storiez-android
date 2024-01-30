@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryLight">#48009688</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#f90101</color>
+    <color name="white">#FFFFFF</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="fuchsia">#FF00FF</color>
+    <color name="red">#FF0000</color>
+    <color name="silver">#D8D8D8</color>
+    <color name="medium_grey">#B4B4B4</color>
+    <color name="light_grey">#f1efef</color>
+    <color name="dark_grey">#9A9A9A</color>
+    <color name="list_background">#526D6D</color>
+    <color name="olive">#808000</color>
+    <color name="list_divider">#800080</color>
+    <color name="list_background_pressed">#800000</color>
+    <color name="liteBlue">#8b4fc5ff</color>
+    <color name="liteBlueBg">#47acc8</color>
+    <color name="whiteSemiTransparent">#61ffffff</color>
+    <color name="whiteTransparent">#00FFFFFF</color>
+    <color name="colorTextEstraLight">#b7b7b7</color>
+    <color name="siteBlue">#0093DD</color>
+    <color name="siteRed">#DA0606</color>
+    <color name="siteRedDark">#6d0303</color>
+    <color name="lime">#60D836</color>
+    <color name="teal">#008080</color>
+    <color name="green">#008000</color>
+    <color name="lightGreen">#4CAF50</color>
+    <color name="purple">#9C27B0</color>
+    <color name="blue">#0000FF</color>
+    <color name="navy">#000080</color>
+    <color name="black">#000000</color>
+    <color name="splash_blue">#011f6a</color>
+    <color name="editTextBg">#F6F6F6</color>
+    <color name="tab_pressed">#EFEFEF</color>
+    <color name="deep_grey">#3C3C3C</color>
+    <color name="default_grey">#757575</color>
+    <color name="default_background">#FAFAFA</color>
+    <color name="chip_color">#53AFF8</color>
+    <color name="chip_border_color">#228CE1</color>
+    <color name="light">#FFD9CA</color>
+    <color name="colorStatusBar">#7CD3FB</color>
+
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorText">#101010</color>
+    <color name="colorBlue">#007dc6</color>
+    <color name="colorBlack">#000000</color>
+    <color name="document">#0da2ca</color>
+    <color name="parcel">#f4791e</color>
+    <color name="special">#12ac0a</color>
+    <color name="colorPOD">#B5000000</color>
+    <color name="colorTextLight">#787878</color>
+
+    <color name="colorGreenBranch">#00AC00</color>
+    <color name="colorAmberBranch">#FFBF00</color>
+    <color name="colorRedBranch">#FF0000</color>
+    <color name="colorGreen">#67C509</color>
+    <color name="colorRed">#ed1c24</color>
+    <color name="colorAmber">#FFC107</color>
+    <color name="colorDeliveryGraph">#FF8000</color>
+    <color name="colorPodGraph">#00C000</color>
+    <color name="colorInboundGraph">#65B9FF</color>
+    <color name="colorSelectedInfo">#1DACEC</color>
+    <color name="colorPlayStore">#00875F</color>
+
+    <color name="colorOutForDelivery">#312196F3</color>
+    <color name="colorDelivered">#DFFDBC</color>
+    <color name="colorUnDelivered">#FDC8C5</color>
+
+    <color name="customerAddUpdate">#0274AE</color>
+
+    <color name="ColorTest">#55006C</color>
+</resources>
