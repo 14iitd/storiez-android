@@ -2,11 +2,18 @@ package in.abhishek.playchat.adapter;
 
 import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +33,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,15 +50,16 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
     private List<QuestionItem> questionItems;
 
     static Context context;
-    public QuestionAdapter(Context context,List<QuestionItem> questionItems)
+    public QuestionAdapter(Context context)
     {
-        this.questionItems = questionItems;
+        questionItems =new ArrayList<>();;
         this.context=context;
     }
 
     public void addData(List<QuestionItem> newData) {
         // Add the new data to the existing dataset
         questionItems.addAll(newData);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -79,6 +88,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
     static class QuestionHolder extends RecyclerView.ViewHolder {
 
         TextView question, q1,q2,q3,q4,played,accuracy;
+        private AnimatorSet frontAnim;
+        private AnimatorSet backAnim;
+        private boolean isFront = true;
         LinearLayout ll;
         int userselect;
         boolean correct=false;
@@ -97,153 +109,199 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
             q4 = itemView.findViewById(R.id.q4);
             played = itemView.findViewById(R.id.played);
             accuracy = itemView.findViewById(R.id.accuracy);
-            ll = itemView.findViewById(R.id.ll
-            );
+            ll = itemView.findViewById(R.id.ll);
         }
 
         void setDataVideo(QuestionItem questionItem)
         {
+
+            if (Objects.equals(questionItem.getGame(), "mcq")){
+                String qu1 = questionItem.getOptions().opt(0).toString();
+                String qu2 = questionItem.getOptions().opt(1).toString();
+                String qu3 = questionItem.getOptions().opt(2).toString();
+                String qu4 = questionItem.getOptions().opt(3).toString();
+                q1.setText(qu1);
+                q2.setText(qu2);
+                q3.setText(qu3);
+                q4.setText(qu4);
+                q1.setBackgroundResource(R.drawable.bg_question);
+                q2.setBackgroundResource(R.drawable.bg_question);
+                q3.setBackgroundResource(R.drawable.bg_question);
+                q4.setBackgroundResource(R.drawable.bg_question);
+                String ans = questionItem.getCorrect_answer();
+                q1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        userselect =0;
+                        if (userselect==questionItem.getAnswer_index()){
+                            correct=true;
+                        }else {
+                            correct=false;
+                        }
+                        volleyQuestionResponse(questionItem.getId(),questionItem.getGame(),String.valueOf(userselect),String.valueOf(correct));
+                        q2.setClickable(false);
+                        q3.setClickable(false);
+                        q4.setClickable(false);
+                        if(Objects.equals(ans, qu1)){
+                            q1.setBackgroundResource(R.drawable.bg_correct);
+                            //basicUtils.showCustomAlert("Right Answer!");
+                        }else {
+                            //basicUtils.showCustomAlert("Wrong Answer!");
+                            q1.setBackgroundResource(R.drawable.bg_incorrect);
+                            if(Objects.equals(ans, qu2)){
+                                q2.setBackgroundResource(R.drawable.bg_correct);
+                            }else if(Objects.equals(ans, qu3)){
+                                q3.setBackgroundResource(R.drawable.bg_correct);
+                            }else {
+                                q4.setBackgroundResource(R.drawable.bg_correct);
+                            }
+                        }
+                    }
+                });
+
+                q2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        userselect=1;
+                        if (userselect==questionItem.getAnswer_index()){
+                            correct=true;
+                        }else {
+                            correct=false;
+                        }
+                        volleyQuestionResponse(questionItem.getId(),questionItem.getGame(),String.valueOf(userselect),String.valueOf(correct));
+                        q1.setClickable(false);
+                        q3.setClickable(false);
+                        q4.setClickable(false);
+                        if(Objects.equals(ans, qu2)){
+                            q2.setBackgroundResource(R.drawable.bg_correct);
+                            //basicUtils.showCustomAlert("Right Answer!");
+                        }else {
+                            //basicUtils.showCustomAlert("Wrong Answer!");
+                            q2.setBackgroundResource(R.drawable.bg_incorrect);
+                            if(ans==qu1){
+                                q1.setBackgroundResource(R.drawable.bg_correct);
+                            }else if(ans==qu3){
+                                q3.setBackgroundResource(R.drawable.bg_correct);
+                            }else {
+                                q4.setBackgroundResource(R.drawable.bg_correct);
+                            }
+                        }
+                    }
+                });
+
+                q3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        userselect=2;
+                        if (userselect==questionItem.getAnswer_index()){
+                            correct=true;
+                        }else {
+                            correct=false;
+                        }
+                        volleyQuestionResponse(questionItem.getId(),questionItem.getGame(),String.valueOf(userselect),String.valueOf(correct));
+                        q2.setClickable(false);
+                        q1.setClickable(false);
+                        q4.setClickable(false);
+                        if(Objects.equals(ans, qu3)){
+                            q3.setBackgroundResource(R.drawable.bg_correct);
+                            //basicUtils.showCustomAlert("Right Answer!");
+                        }else {
+                            // basicUtils.showCustomAlert("Wrong Answer!");
+                            q3.setBackgroundResource(R.drawable.bg_incorrect);
+                            if(Objects.equals(ans, qu1)){
+                                q1.setBackgroundResource(R.drawable.bg_correct);
+                            }else if(Objects.equals(ans, qu2)){
+                                q2.setBackgroundResource(R.drawable.bg_correct);
+                            }else {
+                                q4.setBackgroundResource(R.drawable.bg_correct);
+                            }
+                        }
+                    }
+                });
+
+                q4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        userselect=3;
+                        if (userselect==questionItem.getAnswer_index()){
+                            correct=true;
+                        }else {
+                            correct=false;
+                        }
+                        volleyQuestionResponse(questionItem.getId(),questionItem.getGame(),String.valueOf(userselect),String.valueOf(correct));
+                        q2.setClickable(false);
+                        q3.setClickable(false);
+                        q1.setClickable(false);
+                        if(Objects.equals(ans, qu4)){
+                            q4.setBackgroundResource(R.drawable.bg_correct);
+                            //basicUtils.showCustomAlert("Right Answer!");
+                        }else {
+                            //basicUtils.showCustomAlert("Wrong Answer!");
+                            q4.setBackgroundResource(R.drawable.bg_incorrect);
+                            if(Objects.equals(ans, qu2)){
+                                q2.setBackgroundResource(R.drawable.bg_correct);
+                            }else if(Objects.equals(ans, qu3)){
+                                q3.setBackgroundResource(R.drawable.bg_correct);
+                            }else {
+                                q1.setBackgroundResource(R.drawable.bg_correct);
+                            }
+                        }
+                    }
+                });
+            }
+            float scale = context.getResources().getDisplayMetrics().density;
+            question.setCameraDistance(8000 * scale);
             question.setText(questionItem.getQuestion_text());
             accuracy.setText("Accuracy "+questionItem.getAccuracy()+"%");
             played.setText("Played "+questionItem.getPlayed());
+            frontAnim = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.animator.front_animator);
+            backAnim = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.animator.back_animator);
 
-            String qu1 = questionItem.getOptions().opt(0).toString();
-            String qu2 = questionItem.getOptions().opt(1).toString();
-            String qu3 = questionItem.getOptions().opt(2).toString();
-            String qu4 = questionItem.getOptions().opt(3).toString();
-            q1.setText(qu1);
-            q2.setText(qu2);
-            q3.setText(qu3);
-            q4.setText(qu4);
-                    q1.setBackgroundResource(R.drawable.bg_question);
-        q2.setBackgroundResource(R.drawable.bg_question);
-        q3.setBackgroundResource(R.drawable.bg_question);
-        q4.setBackgroundResource(R.drawable.bg_question);
-        String ans = questionItem.getCorrect_answer();
+            if (Objects.equals(questionItem.getGame(), "flashcard")){
+                q1.setVisibility(View.GONE);
+                q2.setVisibility(View.GONE);
+                q3.setVisibility(View.GONE);
+                q4.setVisibility(View.GONE);
+                accuracy.setVisibility(View.GONE);
+                played.setVisibility(View.GONE);
+                ll.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final ObjectAnimator oa1 = ObjectAnimator.ofFloat(question, "scaleX", 1f, 0f);
+                        final ObjectAnimator oa2 = ObjectAnimator.ofFloat(question, "scaleX", 0f, 1f);
+                        oa1.setInterpolator(new DecelerateInterpolator());
+                        oa2.setInterpolator(new AccelerateDecelerateInterpolator());
+                        if (isFront) {
+                            oa1.addListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    question.setText(questionItem.getAnswer());
+                                    oa2.start();
+                                }
+                            });
+                            oa1.start();isFront = false;
+                            ll.setBackgroundColor(Color.GREEN);
+                        }else {
+                            oa1.addListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    question.setText(questionItem.getQuestion_text());
+                                    oa2.start();
+                                }
+                            });
+                            oa1.start();
+                            isFront = true;
+                            ll.setBackgroundColor(Color.parseColor("#"+questionItem.getColor()));
+                        }
 
-
+                    }
+                });
+            }
         ll.setBackgroundColor(Color.parseColor("#"+questionItem.getColor()));
         //binding.ll2.setBackgroundColor(Color.parseColor("#"+questionItem1.getColor()));
 
-        q1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userselect =0;
-                if (userselect==questionItem.getAnswer_index()){
-                    correct=true;
-                }else {
-                    correct=false;
-                }
-                volleyQuestionResponse(questionItem.getId(),questionItem.getGame(),String.valueOf(userselect),String.valueOf(correct));
-                q2.setClickable(false);
-                q3.setClickable(false);
-                q4.setClickable(false);
-                if(Objects.equals(ans, qu1)){
-                    q1.setBackgroundResource(R.drawable.bg_correct);
-                    //basicUtils.showCustomAlert("Right Answer!");
-                }else {
-                    //basicUtils.showCustomAlert("Wrong Answer!");
-                    q1.setBackgroundResource(R.drawable.bg_incorrect);
-                    if(Objects.equals(ans, qu2)){
-                        q2.setBackgroundResource(R.drawable.bg_correct);
-                    }else if(Objects.equals(ans, qu3)){
-                        q3.setBackgroundResource(R.drawable.bg_correct);
-                    }else {
-                        q4.setBackgroundResource(R.drawable.bg_correct);
-                    }
-                }
-            }
-        });
-
-        q2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userselect=1;
-                if (userselect==questionItem.getAnswer_index()){
-                    correct=true;
-                }else {
-                    correct=false;
-                }
-                volleyQuestionResponse(questionItem.getId(),questionItem.getGame(),String.valueOf(userselect),String.valueOf(correct));
-                q1.setClickable(false);
-                q3.setClickable(false);
-                q4.setClickable(false);
-                if(Objects.equals(ans, qu2)){
-                    q2.setBackgroundResource(R.drawable.bg_correct);
-                    //basicUtils.showCustomAlert("Right Answer!");
-                }else {
-                    //basicUtils.showCustomAlert("Wrong Answer!");
-                    q2.setBackgroundResource(R.drawable.bg_incorrect);
-                    if(ans==qu1){
-                        q1.setBackgroundResource(R.drawable.bg_correct);
-                    }else if(ans==qu3){
-                        q3.setBackgroundResource(R.drawable.bg_correct);
-                    }else {
-                        q4.setBackgroundResource(R.drawable.bg_correct);
-                    }
-                }
-            }
-        });
-
-        q3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userselect=2;
-                if (userselect==questionItem.getAnswer_index()){
-                    correct=true;
-                }else {
-                    correct=false;
-                }
-                volleyQuestionResponse(questionItem.getId(),questionItem.getGame(),String.valueOf(userselect),String.valueOf(correct));
-                q2.setClickable(false);
-                q1.setClickable(false);
-                q4.setClickable(false);
-                if(Objects.equals(ans, qu3)){
-                    q3.setBackgroundResource(R.drawable.bg_correct);
-                    //basicUtils.showCustomAlert("Right Answer!");
-                }else {
-                   // basicUtils.showCustomAlert("Wrong Answer!");
-                    q3.setBackgroundResource(R.drawable.bg_incorrect);
-                    if(Objects.equals(ans, qu1)){
-                        q1.setBackgroundResource(R.drawable.bg_correct);
-                    }else if(Objects.equals(ans, qu2)){
-                        q2.setBackgroundResource(R.drawable.bg_correct);
-                    }else {
-                        q4.setBackgroundResource(R.drawable.bg_correct);
-                    }
-                }
-            }
-        });
-
-        q4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userselect=3;
-                if (userselect==questionItem.getAnswer_index()){
-                    correct=true;
-                }else {
-                    correct=false;
-                }
-                volleyQuestionResponse(questionItem.getId(),questionItem.getGame(),String.valueOf(userselect),String.valueOf(correct));
-                q2.setClickable(false);
-                q3.setClickable(false);
-                q1.setClickable(false);
-                if(Objects.equals(ans, qu4)){
-                    q4.setBackgroundResource(R.drawable.bg_correct);
-                    //basicUtils.showCustomAlert("Right Answer!");
-                }else {
-                    //basicUtils.showCustomAlert("Wrong Answer!");
-                    q4.setBackgroundResource(R.drawable.bg_incorrect);
-                    if(Objects.equals(ans, qu2)){
-                        q2.setBackgroundResource(R.drawable.bg_correct);
-                    }else if(Objects.equals(ans, qu3)){
-                        q3.setBackgroundResource(R.drawable.bg_correct);
-                    }else {
-                        q1.setBackgroundResource(R.drawable.bg_correct);
-                    }
-                }
-            }
-        });
         }
 
     }

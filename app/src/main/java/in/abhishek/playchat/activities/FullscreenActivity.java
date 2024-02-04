@@ -57,12 +57,12 @@ public class FullscreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_fullscreen);
-        pbDestination = findViewById(R.id.pbDestination);
+        //setContentView(R.layout.activity_fullscreen);
+        //pbDestination = findViewById(R.id.pbDestination);
         init();
 
 //        if (ActivityCompat.checkSelfPermission(FullscreenActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
@@ -78,7 +78,7 @@ public class FullscreenActivity extends AppCompatActivity {
 //        } else {
 //            volleyGetLogin(pbDestination);
 //        }
-        volleyGetLogin(pbDestination);
+        volleyGetLogin();
 
 
 //        new Handler().postDelayed(new Runnable() {
@@ -96,10 +96,10 @@ public class FullscreenActivity extends AppCompatActivity {
         context = this;
         basicUtils = new BasicUtils(context);
     }
-    private void volleyGetLogin( final ProgressBar pbDestination) {
+    private void volleyGetLogin() {
         final API_Details details = new API_Details(context);
         details.setAPI_Name("volleyGetLogin");
-        pbDestination.setVisibility(View.VISIBLE);
+        //pbDestination.setVisibility(View.VISIBLE);
         String deviceId = BasicUtils.getDeviceId(context);
         String url = ApiProcessing.Login.API_URL;
         Log.i(TAG, "volleyGetLogin : URL = " + url);
@@ -115,7 +115,7 @@ public class FullscreenActivity extends AppCompatActivity {
                         try {
                             //LoginItem loginItem = ApiProcessing.Login.parseResponse(response);
                             details.setResponse(response.toString());
-                            pbDestination.setVisibility(View.GONE);
+                            //pbDestination.setVisibility(View.GONE);
 //                            Log.i(TAG, "S_version response = " + loginItem.getDevice_id());
                             Log.i(TAG, "volleyGetCityStateName : Response = " + response);
                             Log.i(TAG, "volleyGetCityStateName : Response Length = " + response.length());

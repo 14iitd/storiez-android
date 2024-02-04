@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.Request;
@@ -81,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         questionItem= new QuestionItem();
         basicUtils = new BasicUtils(context);
+        initView();
         volleyGetQuestion();
 
     }
-    private void initView(QuestionItem questionItem1) {
-        branchNames = new ArrayList<>();
+    private void initView() {
 
 //        final TextView question = binding.question;
 //        final TextView q1 = binding.q1;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 //        List<QuestionItem> videoActList = new ArrayList<>();
 
         //videosViewPager.setAdapter(new QuestionAdapter(context,branches));
-        adapter = new QuestionAdapter(context,branches); // Replace YourPagerAdapter with your actual adapter
+        adapter = new QuestionAdapter(context); // Replace YourPagerAdapter with your actual adapter
         videosViewPager.setAdapter(adapter);
         videosViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -111,11 +112,33 @@ public class MainActivity extends AppCompatActivity {
                 // Check if the user has reached the 5th item
                 if (position == adapter.getItemCount() - 1) {
                     // Fetch more data from the API and add it to your adapter
-//                    volleyGetQuestion();
-                    fetchMoreData();
+                    volleyGetQuestion();
+//                    fetchMoreData();
                 }
             }
         });
+//        videosViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                // Not needed for infinite scrolling
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                // Check if the user has reached the last item
+//                if (position == adapter.getItemCount() - 1) {
+//                    // Load more data from the API
+//                    volleyGetQuestion();
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//                // Not needed for infinite scrolling
+//            }
+//        });
+
+
 
         binding.home.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private List<QuestionItem> volleyGetQuestion( ) {
+    private void volleyGetQuestion( ) {
         final API_Details details = new API_Details(context);
         details.setAPI_Name("volleyGetQuestion");
         // pbDestination.setVisibility(View.VISIBLE);
@@ -229,8 +252,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         Log.i(TAG, "volleyGetQuestion : Response = " + response);
                         try {
+
                             branches = ApiProcessing.GetQuestion.parseResponse(response);
-//                            adapter.addData(branches);
+                            adapter.addData(branches);
+                            //initView(questionItem);
 //
 //                            // Notify the adapter about the data change
 //                            adapter.notifyDataSetChanged();
@@ -241,7 +266,6 @@ public class MainActivity extends AppCompatActivity {
                             details.setResponse(response.toString());
                             if (Constants.SUPER_USER)
                                 details.show();
-                            initView(questionItem);
                             //pbDestination.setVisibility(View.GONE);
 //                            Log.i(TAG, "S_version response = " + loginItem.getDevice_id());
                            // Log.i(TAG, "volleyGetQuestion : Response = " + response);
@@ -284,7 +308,6 @@ public class MainActivity extends AppCompatActivity {
 //                        0,  //Since Multiple bids are being placed if retry is hit as response is delayed but DB captures the bid
 //                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         //SApplication.getInstance().addToRequestQueue(request, "GetDestination");
-        return branches;
     }
 
     private void volleyQuestionResponse(String question_id, String gmae, String user_select, String correct) {

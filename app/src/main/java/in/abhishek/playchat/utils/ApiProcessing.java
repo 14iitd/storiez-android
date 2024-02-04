@@ -45,14 +45,18 @@ public class ApiProcessing {
                 vItem.setDevice_id(jo.getString("device_id"));
                 vItem.setQuestion_text(jo.getString("question_text"));
                 vItem.setGame(jo.getString("game"));
-                vItem.setOptions((jo.getJSONArray("options")));
-                vItem.setCorrect_answer(jo.getString("correct_answer"));
-                vItem.setAnswer_index(jo.getInt("answer_index"));
-                vItem.setAnswer(jo.getString("answer"));
+                if(jo.getString("game").equals("mcq")){
+                    vItem.setOptions((jo.getJSONArray("options")));
+                    vItem.setCorrect_answer(jo.getString("correct_answer"));
+                    vItem.setAnswer_index(jo.getInt("answer_index"));
+                    vItem.setQuiz_name(jo.getString("quiz_name"));
+                }
+                if(jo.getString("game").equals("flashcard")){
+                    vItem.setAnswer(jo.getString("answer"));
+                }
                 vItem.setCategory(jo.getString("category"));
                 vItem.setAge(jo.getString("age"));
                 vItem.setDifficulty(jo.getString("difficulty"));
-                vItem.setQuiz_name(jo.getString("quiz_name"));
                 vItem.setTopic(jo.getString("topic"));
                 vItem.setId(jo.getString("id"));
                 vItem.setColor(jo.getString("color"));

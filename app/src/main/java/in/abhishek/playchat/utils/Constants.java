@@ -2,7 +2,7 @@ package in.abhishek.playchat.utils;
 
 public class Constants {
 
-    public static final String API = "https://playchat.live/";//http://200.69.21.171:8000/
+    public static final String API = "https://playchat.live/";//http://200.69.21.171:8000/  https://playchat.live/
 
 
     public static final String API_LOGIN = API+"api/login";
