@@ -39,7 +39,7 @@ import in.abhishek.playchat.utils.Constants;
 public class FullscreenActivity extends AppCompatActivity {
     BasicUtils basicUtils;
 
-    ProgressBar pbDestination;
+    //ProgressBar pbDestination;
     Context context;// Create a request queue
 
 
@@ -136,7 +136,7 @@ public class FullscreenActivity extends AppCompatActivity {
                 details.setErrorResponse(error.toString());
                 if (Constants.SUPER_USER)
                     details.show();
-                pbDestination.setVisibility(View.GONE);
+               // pbDestination.setVisibility(View.GONE);
 //                dialog.dismiss();
                 basicUtils.showCustomAlert("Timed Out!");
                 Log.e(TAG, "volleyGetCityStateName : Error = " + error.toString());

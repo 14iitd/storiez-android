@@ -11,10 +11,26 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:roundIcon="@drawable/icon"
-        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Playchat"
+        android:usesCleartextTraffic="true"
         tools:targetApi="34">
+        <activity
+            android:name=".activities.TakePictureActivity"
+            android:exported="true"
+            android:theme="@style/ThemeOverlay.Playchat.FullscreenContainer">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activities.CreateCardActivity"
+            android:exported="true"
+            android:theme="@style/ThemeOverlay.Playchat.FullscreenContainer">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".activities.MoreActivity"
             android:exported="true"
@@ -39,6 +55,10 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+            <activity
+                android:name="com.yalantis.ucrop.UCropActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/ThemeOverlay.Playchat.FullscreenContainer" />
         <activity
             android:name=".activities.MultiPlayerActivity"
             android:exported="true"
@@ -69,5 +89,6 @@
             </intent-filter>
         </activity>
     </application>
+
 
 </manifest>

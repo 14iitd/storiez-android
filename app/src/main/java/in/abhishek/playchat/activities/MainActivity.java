@@ -2,17 +2,23 @@ package in.abhishek.playchat.activities;
 
 import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -71,8 +77,7 @@ public class MainActivity extends AppCompatActivity {
         binding.llCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, CreateQuestionActivity.class);
-                startActivity(i);
+                showBottomDialog();
             }
         });
 
@@ -88,20 +93,9 @@ public class MainActivity extends AppCompatActivity {
     }
     private void initView() {
 
-//        final TextView question = binding.question;
-//        final TextView q1 = binding.q1;
-//        final TextView q2 = binding.q2;
-//        final TextView q3 = binding.q3;
-//        final TextView q4 = binding.q4;
-//        final TextView accuracy = binding.accuracy;
-//        final TextView played = binding.played;
         videosViewPager = findViewById(R.id.MainViewPager);
-        videosViewPager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        //videosViewPager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-        // creating array list
-//        List<QuestionItem> videoActList = new ArrayList<>();
-
-        //videosViewPager.setAdapter(new QuestionAdapter(context,branches));
         adapter = new QuestionAdapter(context); // Replace YourPagerAdapter with your actual adapter
         videosViewPager.setAdapter(adapter);
         videosViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -117,26 +111,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-//        videosViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                // Not needed for infinite scrolling
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                // Check if the user has reached the last item
-//                if (position == adapter.getItemCount() - 1) {
-//                    // Load more data from the API
-//                    volleyGetQuestion();
-//                }
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//                // Not needed for infinite scrolling
-//            }
-//        });
 
 
 
@@ -170,69 +144,63 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    private void fetchMoreData() {
-        // Make your API call here and add the new data to your adapter
-        // For example, you can use Retrofit, AsyncTask, or any other networking library
-        // After fetching data, add it to your adapter and notify the adapter about the data change
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            public void run() {
-                volleyGetQuestion();
-                adapter.addData(branches);
 
-                // Notify the adapter about the data change
-                adapter.notifyDataSetChanged();
+    private void showBottomDialog() {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.create_sheet_layout);
+
+//        LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
+//        LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
+        LinearLayout llMcq = dialog.findViewById(R.id.llMcq);
+        LinearLayout llCard = dialog.findViewById(R.id.llCard);
+        LinearLayout llPost = dialog.findViewById(R.id.llPost);
+        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+
+        llMcq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent i = new Intent(MainActivity.this, CreateQuestionActivity.class);
+                startActivity(i);
             }
         });
-//        new AsyncTask<Void, Void, List<QuestionItem>>() {
-//            @Override
-//            protected List<QuestionItem> doInBackground(Void... voids) {
-//                // Make your API call and return the new data
-//                return volleyGetQuestion();
-//            }
-//
-//            @Override
-//            protected void onPostExecute(List<QuestionItem> newData) {
-//                // Add the new data to your adapter
-//                if (newData != null) {
-//                    // Add the new data to the adapter
-//                    adapter.addData(newData);
-//
-//                    // Notify the adapter about the data change
-//                    adapter.notifyDataSetChanged();
-//                }
-//            }
-//        }.execute();
+
+        llCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent i = new Intent(MainActivity.this, CreateCardActivity.class);
+                startActivity(i);
+            }
+        });
+
+        llPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent i = new Intent(MainActivity.this, TakePictureActivity.class);
+                startActivity(i);
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
     }
-
-//    private void onInfinitePageChangeCallback(int listSize) {
-//        binding.MainViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//                super.onPageScrollStateChanged(state);
-//                if (state == ViewPager2.SCROLL_STATE_IDLE) {
-//                    switch (binding.MainViewPager.getCurrentItem()) {
-//                        case (listSize - 1):
-//                            volleyGetQuestion();
-//                            break;
-//                        case 0:
-//                            binding.MainViewPager.setCurrentItem(listSize - 2, false);
-//                            break;
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                super.onPageSelected(position);
-//                if (position != 0 && position != listSize - 1) {
-//                    // pageIndicatorView.setSelected(position-1)
-//                }
-//            }
-//        });
-//    }
-
-
 
     private void volleyGetQuestion( ) {
         final API_Details details = new API_Details(context);
