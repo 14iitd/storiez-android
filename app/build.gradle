@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'in.abhishek.playchat'
+    namespace 'in.android.storiez'
     compileSdk 34
 
     defaultConfig {
-        applicationId "in.abhishek.playchat"
+        applicationId 'in.android.storiez'
         minSdk 21
         targetSdk 34
         versionCode 10

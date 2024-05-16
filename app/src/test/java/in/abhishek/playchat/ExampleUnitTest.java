@@ -1,4 +1,4 @@
-package in.abhishek.playchat;
+package in.android.storiez;
 
 import org.junit.Test;
 
