@@ -5,6 +5,7 @@ import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         questionItem= new QuestionItem();
         basicUtils = new BasicUtils(context);
         initView();
+
         volleyGetQuestion();
 
     }
@@ -197,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void volleyGetQuestion( ) {
+        //SharedPreferences.Editor editor = prefs.edit();
         final API_Details details = new API_Details(context);
         details.setAPI_Name("volleyGetQuestion");
         // pbDestination.setVisibility(View.VISIBLE);
@@ -353,6 +358,23 @@ public class MainActivity extends AppCompatActivity {
 //                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         //SApplication.getInstance().addToRequestQueue(request, "GetDestination");
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        // Handle item selection
+        if (id == R.id.menu_item) {
+            // Handle the menu item click (e.g., open a side drawer)
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 }

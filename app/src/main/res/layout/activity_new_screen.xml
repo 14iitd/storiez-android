@@ -1,0 +1,25 @@
+<!-- activity_new_screen.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.LanguageActivity">
+
+    <Button
+        android:id="@+id/button_option1"
+        android:layout_width="188dp"
+        android:layout_height="117dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="HINDI" />
+
+    <Button
+        android:id="@+id/button_option2"
+        android:layout_width="160dp"
+        android:layout_height="110dp"
+        android:layout_below="@id/button_option1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:text="ENGLISH" />
+
+</RelativeLayout>

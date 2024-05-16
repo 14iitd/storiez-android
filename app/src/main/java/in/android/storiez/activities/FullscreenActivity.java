@@ -115,7 +115,7 @@ public class FullscreenActivity extends AppCompatActivity {
                             Log.i(TAG, "volleyGetCityStateName : Response = " + response);
                             Log.i(TAG, "volleyGetCityStateName : Response Length = " + response.length());
 
-                            Intent intent = new Intent(FullscreenActivity.this, MainActivity.class);
+                            Intent intent = new Intent(FullscreenActivity.this, LanguageActivity.class);
                             startActivity(intent);
                             finish();
 
