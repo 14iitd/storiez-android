@@ -1,25 +1,87 @@
 <!-- activity_new_screen.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LanguageActivity">
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="100dp"
+    android:background="@color/white">
 
-    <Button
-        android:id="@+id/button_option1"
-        android:layout_width="188dp"
-        android:layout_height="117dp"
-        android:layout_centerHorizontal="true"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/hindi_card"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:contentPadding="0dp"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp">
+
+        <TextView
+            android:id="@+id/button_option1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:text="HINDI"
+            app:strokeWidth="0dp" />
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/english_card"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="50dp"
-        android:text="HINDI" />
+        android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="@color/white"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp">
 
-    <Button
-        android:id="@+id/button_option2"
-        android:layout_width="160dp"
-        android:layout_height="110dp"
-        android:layout_below="@id/button_option1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp"
-        android:text="ENGLISH" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/button_option2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="ENGLISH"
+            android:textColor="@color/black"
+            app:backgroundTint="@color/white" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <ImageView
+        android:id="@+id/forward_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="20dp"
+        android:rotation="180"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/baseline_keyboard_backspace_24" />
+
+    <!--    <Button-->
+    <!--        android:id="@+id/button_option1"-->
+    <!--        android:layout_width="188dp"-->
+    <!--        android:layout_height="117dp"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:layout_marginTop="50dp"-->
+    <!--        android:text="HINDI" />-->
+
+    <!--    <Button-->
+    <!--        android:id="@+id/button_option2"-->
+    <!--        android:layout_width="160dp"-->
+    <!--        android:layout_height="110dp"-->
+    <!--        android:layout_below="@id/button_option1"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:layout_marginTop="44dp"-->
+    <!--        android:text="ENGLISH" />-->
+
+</LinearLayout>

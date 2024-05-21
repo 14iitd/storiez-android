@@ -1,4 +1,4 @@
-package in.android.storiez.activities;
+package in.android.storiez.ui.splash;
 
 import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 
@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.viewbinding.ViewBinding;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,17 +24,28 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import in.android.storiez.base.BaseActivity;
+import in.android.storiez.databinding.ActivitySplashBinding;
+import in.android.storiez.ui.home.HomeActivity;
 import in.android.storiez.ui.language.LanguageActivity;
 import in.android.storiez.utils.API_Details;
 import in.android.storiez.utils.ApiProcessing;
 import in.android.storiez.utils.BasicUtils;
 import in.android.storiez.utils.Constants;
+import in.android.storiez.utils.StoriezApp;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
-public class FullscreenActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
+    @Override
+    public int getLayoutId() {
+        return 0;
+    }
+
+    @Override
+    public ViewBinding initViewBinding(LayoutInflater inflater) {
+        return ActivitySplashBinding.inflate(inflater);
+    }
+
+
     BasicUtils basicUtils;
 
     //ProgressBar pbDestination;
@@ -49,49 +62,22 @@ public class FullscreenActivity extends AppCompatActivity {
     };
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        //setContentView(R.layout.activity_fullscreen);
-        //pbDestination = findViewById(R.id.pbDestination);
         init();
 
-//        if (ActivityCompat.checkSelfPermission(FullscreenActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-//                && ActivityCompat.checkSelfPermission(FullscreenActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-//                && ActivityCompat.checkSelfPermission(FullscreenActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//
-//            //viewFlipper.stopFlipping();
-//            ActivityCompat.requestPermissions(
-//                    FullscreenActivity.this,
-//                    PERMISSIONS_STORAGE,
-//                    REQUEST_EXTERNAL_STORAGE
-//            );
-//        } else {
-//            volleyGetLogin(pbDestination);
-//        }
+
         volleyGetLogin();
-
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent i = new Intent(FullscreenActivity.this, MainActivity.class);
-//                startActivity(i);
-//                finish();
-//            }
-//        }, 3000);
-
-
     }
-    private void init(){
+
+    private void init() {
         context = this;
         basicUtils = new BasicUtils(context);
     }
+
     private void volleyGetLogin() {
         final API_Details details = new API_Details(context);
         details.setAPI_Name("voll eyGetLogin");
@@ -116,9 +102,13 @@ public class FullscreenActivity extends AppCompatActivity {
                             Log.i(TAG, "volleyGetCityStateName : Response = " + response);
                             Log.i(TAG, "volleyGetCityStateName : Response Length = " + response.length());
 
-                            Intent intent = new Intent(FullscreenActivity.this, LanguageActivity.class);
-                            startActivity(intent);
-                            finish();
+                            if (StoriezApp.getAppDataManager().isHindiSelection() || StoriezApp.getAppDataManager().isEnglishSelection()) {
+                                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                                finish();
+                            } else {
+                                startActivity(new Intent(SplashActivity.this, LanguageActivity.class));
+                                finish();
+                            }
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -132,12 +122,12 @@ public class FullscreenActivity extends AppCompatActivity {
                 details.setErrorResponse(error.toString());
                 if (Constants.SUPER_USER)
                     details.show();
-               // pbDestination.setVisibility(View.GONE);
+                // pbDestination.setVisibility(View.GONE);
 //                dialog.dismiss();
                 basicUtils.showCustomAlert("Timed Out!");
                 Log.e(TAG, "volleyGetCityStateName : Error = " + error.toString());
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<>();
@@ -154,5 +144,4 @@ public class FullscreenActivity extends AppCompatActivity {
 //                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         //SApplication.getInstance().addToRequestQueue(request, "GetDestination");
     }
-
 }

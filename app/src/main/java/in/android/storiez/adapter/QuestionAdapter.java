@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -56,6 +57,7 @@ import in.android.storiez.utils.API_Details;
 import in.android.storiez.utils.ApiProcessing;
 import in.android.storiez.utils.BasicUtils;
 import in.android.storiez.utils.Constants;
+import in.android.storiez.utils.StoriezApp;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.QuestionHolder>{
     private List<QuestionItem> questionItems;
@@ -70,7 +72,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
         questionItems =new ArrayList<>();
         areaList = new ArrayList<>();
         this.context=context;
-        basicUtils = new BasicUtils(context);
+        basicUtils = new BasicUtils(StoriezApp.getInstance());
     }
 
     public void addData(List<QuestionItem> newData) {
@@ -367,7 +369,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
                     }
                 });
             }
-            float scale = context.getResources().getDisplayMetrics().density;
+            float scale = itemView.getContext().getResources().getDisplayMetrics().density;
             question.setCameraDistance(8000 * scale);
             question.setText(questionItem.getQuestion_text());
             accuracy.setText("Accuracy "+questionItem.getAccuracy()+"%");
@@ -403,10 +405,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
                 if (!text.isEmpty()){
                     volleyPostComment(text,id,progressBar);
                     volleyGetComments(id);
-                    basicUtils.showCustomAlert("Done");
+                    Toast.makeText(StoriezApp.getInstance(), "Done", Toast.LENGTH_SHORT).show();
+//                    Commented  by KK
+//                    basicUtils.showCustomAlert("Done");
                    comment.setText("");
                 } else {
-                    basicUtils.showCustomAlert("Please Enter text!");
+                    //                    Commented  by KK
+//                    basicUtils.showCustomAlert("Please Enter text!");
+                    Toast.makeText(StoriezApp.getInstance(), "Please Enter Text", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey">
+
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/posts_constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/MainViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+
+            <ImageView
+                android:id="@+id/menu_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@drawable/icon_drawer_menu"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topics_constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/white"
+            android:elevation="16dp">
+
+            <LinearLayout
+                android:id="@+id/language_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="40dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/hindi_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    app:cardElevation="8dp"
+                    app:strokeColor="@color/black"
+                    app:strokeWidth="0.5dp">
+
+                    <TextView
+                        android:id="@+id/hindi_txt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingStart="8dp"
+                        android:paddingTop="6dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="6dp"
+                        android:text="Hindi"
+                        android:textSize="20dp" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/english_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    app:cardElevation="8dp"
+                    app:strokeColor="@color/black"
+                    app:strokeWidth="0.5dp">
+
+                    <TextView
+                        android:id="@+id/english_txt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingStart="8dp"
+                        android:paddingTop="6dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="6dp"
+
+                        android:text="English"
+                        android:textSize="16dp" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/topics_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Topics"
+                android:textSize="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/language_layout" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/topic_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/topics_txt" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+
+</FrameLayout>
+
+
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--    android:id="@+id/container"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:background="@color/light_grey">-->
+
+    <!--    <androidx.viewpager2.widget.ViewPager2-->
+    <!--        android:id="@+id/MainViewPager"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:orientation="vertical"-->
+    <!--        android:layout_alignParentTop="true" />-->
+
+
+    <!--    </RelativeLayout>-->
+

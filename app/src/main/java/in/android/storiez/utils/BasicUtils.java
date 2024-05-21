@@ -55,7 +55,7 @@ public class BasicUtils extends Activity {
     boolean doublePressExit = false;
     private static final String TAG = "BasicUtils";
     public BasicUtils(Context context) {
-        this.toast = new Toast(context);
+//        this.toast = new Toast(context);
         this.context = context;
         try {
             this.activity = (Activity) context;
@@ -669,12 +669,12 @@ public class BasicUtils extends Activity {
     }
 
     public void vibrate() {
-        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            v.vibrate(500);
-        }
+//        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+//        } else {
+//            v.vibrate(500);
+//        }
     }
 
     public void playBeep() {

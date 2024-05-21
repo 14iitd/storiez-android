@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:title="Home"
+        android:icon="@drawable/home"/>
+
+    <item
+        android:id="@+id/nav_search"
+        android:title="Search"
+        android:icon="@drawable/bolt"/>
+
+    <item
+        android:id="@+id/nav_create"
+        android:title="Create"
+        android:icon="@drawable/ic_baseline_add_24"/>
+
+    <item
+        android:id="@+id/nav_workspaces"
+        android:title="Workspaces"
+        android:icon="@drawable/workspaces"/>
+
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_baseline_account_circle_24"/>
+</menu>
