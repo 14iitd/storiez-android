@@ -67,6 +67,15 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
     public int getLayoutId() {
         return 0;
     }
+    ViewPager2 videosViewPager;
+    QuestionAdapter adapter;
+    BasicUtils basicUtils;
+    QuestionItem questionItem;
+    ArrayList<QuestionItem> branches;
+    ArrayList<String> branchNames;
+    ProgressBar pbDestination;
+    Context context;
+    int userselect;
 
     @Override
     public ViewBinding initViewBinding(LayoutInflater inflater) {

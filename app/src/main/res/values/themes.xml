@@ -39,7 +39,7 @@
     </style>
 
     <style name="ThemeOverlay.Playchat.FullscreenContainer" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="fullscreenBackgroundColor">@color/colorBlue</item>
+        <item name="fullscreenBackgroundColor">@color/colorAmberBranch</item>
         <item name="fullscreenTextColor">@color/colorBlue</item>
     </style>
     <style name="DialogAnimation">
