@@ -57,6 +57,7 @@ import in.android.storiez.base.BaseActivity;
 import in.android.storiez.databinding.ActivityHomeBinding;
 import in.android.storiez.databinding.ActivityMainBinding;
 import in.android.storiez.items.QuestionItem;
+import in.android.storiez.ui.ProfileFragment;
 import in.android.storiez.utils.API_Details;
 import in.android.storiez.utils.ApiProcessing;
 import in.android.storiez.utils.BasicUtils;
@@ -67,6 +68,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
     public int getLayoutId() {
         return 0;
     }
+
     ViewPager2 videosViewPager;
     QuestionAdapter adapter;
     BasicUtils basicUtils;
@@ -86,7 +88,10 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
     private BottomNavigationView bottomNavigationView;
     private int selectedItemId = R.id.nav_home; // Default selected item
 
-    HomeFragment homeFragment  = new HomeFragment();
+    HomeFragment homeFragment = new HomeFragment();
+
+    boolean isOnHome = true;
+    ProfileFragment profileFragment = new ProfileFragment();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,11 +102,10 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, homeFragment)
-                    .commit();
-
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, homeFragment)
+                .commit();
 
         setUpListeners();
     }
@@ -121,28 +125,36 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
                 switch (selectedItemId) {
                     case R.id.nav_home:
                         selectedFragment = homeFragment;
-                        homeFragment.scrollToTheTop();
+
+                        if (isOnHome) {
+                            homeFragment.scrollToTheTop();
+                        }
+                        isOnHome = true;
                         Log.d(TAG, "onNavigationItemSelected: home ");
                         break;
 
                     case R.id.nav_search:
-
+                        selectedFragment = profileFragment;
+                        isOnHome = false;
                         Log.d(TAG, "onNavigationItemSelected: search ");
                         break;
 
                     case R.id.nav_create:
-
+                        selectedFragment = profileFragment;
+                        isOnHome = false;
                         Log.d(TAG, "onNavigationItemSelected: Create ");
                         // Initialize your CommunitiesFragment
                         break;
 
                     case R.id.nav_workspaces:
+                        selectedFragment = profileFragment;
+                        isOnHome = false;
                         // Initialize NotificationFragment
                         break;
 
                     case R.id.nav_profile:
-
-
+                        selectedFragment = profileFragment;
+                        isOnHome = false;
                         // Initialize  MessageFragment
                         break;
                 }
