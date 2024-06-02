@@ -139,10 +139,10 @@ public class ApiManager {
 
                                     Log.d(TAG, "onResponse: we got some data " + contentTopics);
 
-                                    if (StoriezApp.getAppDatabase().contentTopicDao().getTopics().size() > 0) {
-                                        StoriezApp.getAppDatabase().contentTopicDao().deleteAll();
-                                    }
-                                    StoriezApp.getAppDatabase().contentTopicDao().insertAll(contentTopics);
+//                                    if (StoriezApp.getAppDatabase().contentTopicDao().getTopics().size() > 0) {
+//                                        StoriezApp.getAppDatabase().contentTopicDao().deleteAll();
+//                                    }
+//                                    StoriezApp.getAppDatabase().contentTopicDao().insertAll(contentTopics);
                                     contentTopicsMutableLiveData.postValue(contentTopics);
                                 } else {
                                     Log.d(TAG, "onResponse: Missing 'data' array in the response");

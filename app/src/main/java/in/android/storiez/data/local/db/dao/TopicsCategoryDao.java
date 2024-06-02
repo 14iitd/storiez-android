@@ -28,6 +28,12 @@ public interface TopicsCategoryDao {
     @Query("DELETE FROM content_topic")
     void deleteAll();
 
+
+
+    @Query("DELETE FROM content_topic Where category =:category")
+    void delete(String category);
+
+
     @Query("SELECT * FROM content_topic WHERE isSelected = 1")
     List<ContentTopic> getSelectedTopics();
 

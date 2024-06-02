@@ -77,7 +77,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
 
     public void addData(List<QuestionItem> newData) {
         // Add the new data to the existing dataset
-        questionItems =new ArrayList<>();
+//        questionItems =new ArrayList<>();
         questionItems.addAll(newData);
         notifyDataSetChanged();
     }

@@ -62,6 +62,7 @@ import in.android.storiez.utils.ApiProcessing;
 import in.android.storiez.utils.BasicUtils;
 import in.android.storiez.utils.Constants;
 import in.android.storiez.utils.StoriezApp;
+import in.android.storiez.utils.Utils;
 
 public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
     @Override
@@ -121,6 +122,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
                 if (position == adapter.getItemCount() - 1) {
                     // Fetch more data from the API and add it to your adapter
                     volleyGetQuestion();
+                    Log.d(TAG, "onPageSelected: requesting volley ");
 //                    fetchMoreData();
                 }
             }
@@ -135,10 +137,12 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
         viewModel.getContentTopicsObservable().observe(getViewLifecycleOwner(), topics -> {
             if (topics != null) {
                 Log.d(TAG, "onViewCreated: got some data ");
-                topicsAdapter.updateTopics(topics);
+                topicsAdapter.updateTopics(Utils.preProcessTopics(topics));
 
             }
         });
+
+        viewModel.getTopicContents();
 
         if (StoriezApp.getAppDatabase().contentTopicDao().getTopics().size() > 0) {
             topics = StoriezApp.getAppDatabase().contentTopicDao().getTopics();
@@ -178,7 +182,10 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
             @Override
             public void onDrawerClosed(View drawerView) {
                 Log.d(TAG, "onDrawerClosed: ");
-                volleyGetQuestion();
+                if (isDataChanged){
+                    volleyGetQuestion();
+                    isDataChanged   = false;
+                }
                 // No need to handle
             }
 
@@ -267,7 +274,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
         questionItem = new QuestionItem();
         basicUtils = new BasicUtils(context);
         initView();
-
         volleyGetQuestion();
 
     }
@@ -308,7 +314,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 //
 
     }
-
 
 
     public void scrollToTheTop() {
@@ -369,7 +374,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
         Log.i(TAG, "volleyGetQuestion : URL = " + url);
         details.setAPI_URL(url);
-
 
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
