@@ -75,12 +75,24 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicsView
                     ContentTopic currentTopic = topics.get(position);
                     boolean newSelectionState = !currentTopic.isSelected();
 
-                    // Update database
                     StoriezApp.getAppDatabase().contentTopicDao().updateSelection(currentTopic.getId(), newSelectionState);
+
+
+                    Log.d(TAG, "setUpListeners: data base "+StoriezApp.getAppDatabase().contentTopicDao().getTopics().size());
 
                     // Update object state and notify
                     currentTopic.setSelected(newSelectionState);
+                    // Update database
+                    if (newSelectionState) {
+                        Log.d(TAG, "setUpListeners: ");
+                        StoriezApp.getAppDatabase().contentTopicDao().insert(currentTopic);
+                    } else {
+                        StoriezApp.getAppDatabase().contentTopicDao().delete(currentTopic.getCategory());
+                    }
+
                     notifyItemChanged(position);
+
+
 
                     // Log for debugging
                     Log.d(TAG, "Bookmark clicked for position: " + position + ", new selection state: " + newSelectionState);
