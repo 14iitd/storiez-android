@@ -22,7 +22,7 @@
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@null</item>
 
-        <item name="colorPrimary">#F44B87</item>
+        <item name="colorPrimary">#F24E4E</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorSelectedInfo</item>
         <item name="android:statusBarColor">@color/colorSelectedInfo</item>

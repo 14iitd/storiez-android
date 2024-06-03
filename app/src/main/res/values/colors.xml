@@ -74,7 +74,7 @@
     <color name="ColorTest">#55006C</color>
 
     <color name="splash_background">#BED8FF</color>
-    <color name="app_text_color_red">#DE3B40</color>
+    <color name="app_text_color_black">#000000</color>
 
     <color name="topics_text_color">#323842</color>
     <color name="english_btn_bg">#171A1F</color>

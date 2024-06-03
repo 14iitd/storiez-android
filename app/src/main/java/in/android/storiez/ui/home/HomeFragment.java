@@ -65,6 +65,7 @@ import in.android.storiez.utils.StoriezApp;
 import in.android.storiez.utils.Utils;
 
 public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
+
     @Override
     public int getLayoutId() {
         return 0;
@@ -88,6 +89,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
     Context context;
     int userselect;
     boolean correct = false;
+    public HomeFragment(Context context){
+        this.context=context;
+    }
 
     TopicsAdapter topicsAdapter;
 
@@ -109,9 +113,13 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
         super.onViewCreated(view, savedInstanceState);
 
 
-        Log.d(TAG, "onViewCreated: home fragment");
+        Log.e("abhishek", "onViewCreated: home fragment");
+        Log.e("abhishek", this.context.toString());
+        String deviceId=BasicUtils.getDeviceId(this.context);
+        adapter = new QuestionAdapter(this.context);
+        adapter.setdsid(deviceId);
 
-        adapter = new QuestionAdapter(context); // Replace YourPagerAdapter with your actual adapter
+        // Replace YourPagerAdapter with your actual adapter
         binding.MainViewPager.setAdapter(adapter);
         binding.MainViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -121,7 +129,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
                 // Check if the user has reached the 5th item
                 if (position == adapter.getItemCount() - 1) {
                     // Fetch more data from the API and add it to your adapter
-                    volleyGetQuestion();
+                    volleyGetQuestion(false);
                     Log.d(TAG, "onPageSelected: requesting volley ");
 //                    fetchMoreData();
                 }
@@ -183,7 +191,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
             public void onDrawerClosed(View drawerView) {
                 Log.d(TAG, "onDrawerClosed: ");
                 if (isDataChanged){
-                    volleyGetQuestion();
+                    volleyGetQuestion(isDataChanged);
                     isDataChanged   = false;
                 }
                 // No need to handle
@@ -274,7 +282,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
         questionItem = new QuestionItem();
         basicUtils = new BasicUtils(context);
         initView();
-        volleyGetQuestion();
+        volleyGetQuestion(false);
 
     }
 
@@ -320,13 +328,13 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
         if (binding != null) {
             if (binding.MainViewPager != null) {
-                volleyGetQuestion();
-                binding.MainViewPager.setCurrentItem(0, true);
+                volleyGetQuestion(true);
+                //binding.MainViewPager.setCurrentItem(0, true);
             }
         }
     }
 
-    public void volleyGetQuestion() {
+    public void volleyGetQuestion(boolean langTopicChanged) {
 
         final API_Details details = new API_Details(context);
         details.setAPI_Name("volleyGetQuestion");
@@ -388,7 +396,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
                         try {
 
                             branches = ApiProcessing.GetQuestion.parseResponse(response);
-                            adapter.addData(branches);
+                            adapter.addData(branches,langTopicChanged);
                             //initView(questionItem);
 //
 //                            // Notify the adapter about the data change

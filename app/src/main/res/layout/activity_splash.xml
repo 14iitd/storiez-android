@@ -5,38 +5,42 @@
     android:id="@+id/idRLContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/splash_background"
+    android:background="#F24E4E"
     android:orientation="vertical"
     android:theme="@style/ThemeOverlay.Playchat.FullscreenContainer">
 
 
+    <!--on below line we are creating progress bar-->
+
     <ImageView
         android:id="@+id/idIVLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="350dp"
+        android:layout_height="343dp"
         android:layout_marginStart="10dp"
-        android:src="@drawable/app_logo"
+        android:src="@drawable/applogo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.563"
+        app:layout_constraintHorizontal_bias="0.392"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.365" />
+        app:layout_constraintVertical_bias="0.268" />
 
     <TextView
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/idIVLogo"
-        android:layout_marginTop="-50dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/app_name"
-        android:textColor="@color/app_text_color_red"
-        android:textSize="50sp"
+        android:textColor="@color/app_text_color_black"
+        android:textSize="100sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idIVLogo" />
 
-    <!--on below line we are creating progress bar-->
     <ProgressBar
         android:id="@+id/idPBLoading"
         android:layout_width="wrap_content"
@@ -48,18 +52,5 @@
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/pbDestination"
-        style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fullscreen_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:indeterminateTint="@color/white"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

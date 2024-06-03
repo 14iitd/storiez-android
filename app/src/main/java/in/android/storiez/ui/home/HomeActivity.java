@@ -88,7 +88,8 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
     private BottomNavigationView bottomNavigationView;
     private int selectedItemId = R.id.nav_home; // Default selected item
 
-    HomeFragment homeFragment = new HomeFragment();
+    HomeFragment homeFragment = new HomeFragment(this);
+
 
     boolean isOnHome = true;
     ProfileFragment profileFragment = new ProfileFragment();
@@ -108,6 +109,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
                 .commit();
 
         setUpListeners();
+
     }
 
     private void setUpListeners() {

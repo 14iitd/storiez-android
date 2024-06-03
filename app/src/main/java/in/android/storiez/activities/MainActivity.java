@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
 
                             branches = ApiProcessing.GetQuestion.parseResponse(response);
-                            adapter.addData(branches);
+                            adapter.addData(branches,false);
                             //initView(questionItem);
 //
 //                            // Notify the adapter about the data change

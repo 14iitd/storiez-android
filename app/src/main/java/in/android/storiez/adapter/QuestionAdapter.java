@@ -1,6 +1,7 @@
 package in.android.storiez.adapter;
 
 import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
+import static androidx.core.content.ContentProviderCompat.requireContext;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -65,20 +66,34 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
     static ArrayList<RepliesItem> areaList;
     static RecyclerView lvComments;
 
+
     static Context context;
     static BasicUtils basicUtils;
+    String dsid;
+    public void setdsid(String sda){
+        this.dsid=sda;
+    }
     public QuestionAdapter(Context context)
     {
         questionItems =new ArrayList<>();
         areaList = new ArrayList<>();
         this.context=context;
+
+
         basicUtils = new BasicUtils(StoriezApp.getInstance());
     }
 
-    public void addData(List<QuestionItem> newData) {
+    public void addData(List<QuestionItem> newData,boolean langTopicChanged) {
         // Add the new data to the existing dataset
-        questionItems =new ArrayList<>();
-        questionItems.addAll(newData);
+        //questionItems =new ArrayList<>();
+        if(langTopicChanged){
+            questionItems =new ArrayList<>();
+            questionItems.addAll(newData);
+        }
+        else{
+            questionItems.addAll(newData);
+        }
+
         notifyDataSetChanged();
     }
 
@@ -96,7 +111,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
     @Override
     public void onBindViewHolder(@NonNull QuestionHolder holder, int position)
     {
+        holder.setDeviceId(this.dsid
+        );
         holder.setDataView(questionItems.get(position));
+
 
     }
 
@@ -116,6 +134,12 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
         RelativeLayout rl;
         int userselect;
         boolean correct=false;
+        String deviceId;
+
+        public void setDeviceId(String ss){
+            this.deviceId=ss;
+        }
+
 
         public QuestionHolder(@NonNull View itemView)
         {
@@ -143,30 +167,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
 
         void setDataView(QuestionItem questionItem)
         {
+            Log.e("abhishek",this.deviceId);
 
-            if (Objects.equals(questionItem.getType(), "post")){
-                ll1.setVisibility(View.GONE);
-                webView.setVisibility(View.GONE);
-                question.setVisibility(View.VISIBLE);
-                question1.setVisibility(View.GONE);
-                lltap.setVisibility(View.GONE);
-                rl.setVisibility(View.VISIBLE);
-                if (Objects.equals(questionItem.getImage_url(), "")){
-                    Picasso.get().load("https://static.vecteezy.com/system/resources/previews/004/141/669/original/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg").into(imageView);
-                } else {
-                    Picasso.get().load(questionItem.getImage_url()).into(imageView);
-                }
-                volleyGetComments(questionItem.getId());
-                replies.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showBottomDialog(questionItem.getId());
-                    }
-                });
-
-            }
             if(Objects.equals(questionItem.getType(), "html5")){
-
+//
                 ll1.setVisibility(View.GONE);
                 rl.setVisibility(View.GONE);
                 question.setVisibility(View.GONE);
@@ -180,7 +184,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
                         webView.setVisibility(View.VISIBLE);
                     }
                 });
-            webView.loadUrl(questionItem.getSource());
+
+
+
+
+            webView.loadUrl(questionItem.getSource()+"?deviceId="+deviceId);
             webView.getSettings().setJavaScriptEnabled(true);
 
             }
@@ -429,7 +437,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
         final API_Details details = new API_Details(context);
         details.setAPI_Name("volleyGetQuestion");
         // pbDestination.setVisibility(View.VISIBLE);
+
         String deviceId = BasicUtils.getDeviceId(context);
+
         String url = ApiProcessing.QuestionResponse.API_URL;
         JSONObject object = ApiProcessing.QuestionResponse.constructObject(question_id,gmae,user_select,correct);
         Log.i(TAG, "volleyQuestionResponse : URL = " + url);
@@ -584,11 +594,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
         };
         requestQueue.add(request);
     }
+
     private static void volleyGetComments(String id) {
         final API_Details details = new API_Details(context);
         details.setAPI_Name("volleyGetQuestion");
         //basicUtils.showSmallProgressDialog(false);
         String deviceId = BasicUtils.getDeviceId(context);
+
         String url = Constants.API_POST_COMMENT+id+"/replies";
         Log.i(TAG, "volleyGetQuestion : URL = " + url);
         details.setAPI_URL(url);
