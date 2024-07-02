@@ -90,6 +90,12 @@
         </activity>
 
         <activity
+            android:name=".ui.createContent.CreateContentActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Playchat.Fullscreen"/>
+
+
+        <activity
             android:name=".activities.FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"

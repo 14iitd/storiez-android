@@ -58,6 +58,9 @@ import in.android.storiez.databinding.ActivityHomeBinding;
 import in.android.storiez.databinding.ActivityMainBinding;
 import in.android.storiez.items.QuestionItem;
 import in.android.storiez.ui.ProfileFragment;
+import in.android.storiez.ui.createContent.CreateContentActivity;
+import in.android.storiez.ui.createContent.CreateContentBottomSheet;
+import in.android.storiez.ui.createContent.CreateContentFragment;
 import in.android.storiez.utils.API_Details;
 import in.android.storiez.utils.ApiProcessing;
 import in.android.storiez.utils.BasicUtils;
@@ -92,6 +95,9 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
 
     boolean isOnHome = true;
     ProfileFragment profileFragment = new ProfileFragment();
+    CreateContentFragment createContentFragment = new CreateContentFragment();
+
+    CreateContentBottomSheet createContentBottomSheet;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -140,11 +146,10 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
                         break;
 
                     case R.id.nav_create:
-                        selectedFragment = profileFragment;
+                        showCreateContentBottomSheet();
                         isOnHome = false;
                         Log.d(TAG, "onNavigationItemSelected: Create ");
-                        // Initialize your CommunitiesFragment
-                        break;
+                        return false;
 
                     case R.id.nav_workspaces:
                         selectedFragment = profileFragment;
@@ -172,4 +177,13 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
         });
     }
 
+    private void redirectToCreateContentActivity() {
+        startActivity(new Intent(HomeActivity.this, CreateContentActivity.class));
+    }
+
+    private void showCreateContentBottomSheet() {
+        CreateContentBottomSheet createContentBottomSheet = CreateContentBottomSheet.newInstance();
+        createContentBottomSheet.setCancelable(true);
+        createContentBottomSheet.show(getSupportFragmentManager(), createContentBottomSheet.getTag());
+    }
 }

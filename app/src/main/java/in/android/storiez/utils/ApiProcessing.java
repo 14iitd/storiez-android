@@ -47,7 +47,9 @@ public class ApiProcessing {
 
                 if(jo.getString("type").equals("html5")){
                     vItem.setSource(jo.getJSONObject("source").getString("url"));
+                    vItem.setId(jo.getJSONObject("source").getString("_id"));
                     vItem.setColor(jo.getString("color"));
+
                 }
                 if(jo.getString("type").equals("post")){
                     vItem.setQuestion_text(jo.getString("text"));

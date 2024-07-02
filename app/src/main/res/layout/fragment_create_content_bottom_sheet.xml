@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/transparent"
+    android:paddingBottom="20dp">
+
+    <!--    <FrameLayout-->
+    <!--        android:id="@+id/poll_fab_btn"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        android:layout_marginEnd="30dp"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/status_fab_btn">-->
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/create_fab_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/pencil_icon"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/flash_fab_btn" />
+
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:background="@android:color/transparent"-->
+    <!--            android:gravity="center"-->
+    <!--            android:padding="8dp"-->
+    <!--            android:text="Poll"-->
+    <!--            android:textColor="@android:color/white" />-->
+    <!--    </FrameLayout>-->
+
+    <!--    <FrameLayout-->
+    <!--        android:id="@+id/status_fab_btn"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        android:layout_marginBottom="100dp">-->
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/flash_fab_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/camera_icon"
+        android:tint="@color/white"
+
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
+    <!--    <TextView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="center"-->
+    <!--        android:background="@android:color/transparent"-->
+    <!--        android:gravity="center"-->
+    <!--        android:padding="8dp"-->
+
+    <!--        android:text="Status" />-->
+    <!--</FrameLayout>-->
+
+    <!--<FrameLayout-->
+    <!--android:id="@+id/flash_fab_btn"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginStart="50dp"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintStart_toEndOf="@+id/status_fab_btn">-->
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/stats_fab_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/stats_icon"
+        android:tint="@color/white"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/flash_fab_btn" />
+
+    <!--<TextView-->
+    <!--    android:background="@android:color/transparent"-->
+    <!--    android:gravity="center"-->
+    <!--    android:layout_gravity="center"-->
+    <!--    android:layout_height="wrap_content"-->
+    <!--    android:layout_width="wrap_content"-->
+    <!--    android:padding="8dp"-->
+    <!--    android:text="Flash"-->
+    <!--    android:textColor="@color/black" />-->
+    <!--</FrameLayout>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

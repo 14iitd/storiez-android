@@ -69,7 +69,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicsView
         }
 
         private void setUpListeners() {
-            bookmarkImg.setOnClickListener(v -> {
+            itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     ContentTopic currentTopic = topics.get(position);

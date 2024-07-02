@@ -19,3 +19,19 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+## For WebViewActivity
+#-keepclassmembers class ai.simplyfy.bot.util.WebViewActivity {
+#    public *;
+#}
+
+# For WebViewClient
+-keepclassmembers class android.webkit.WebViewClient {
+    public *;
+}
+
+# For WebSettings
+-keepclassmembers class android.webkit.WebSettings {
+    public *;
+}

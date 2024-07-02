@@ -1,25 +1,14 @@
 package in.android.storiez.ui.home;
 
-import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
-
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,11 +22,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,18 +32,12 @@ import java.util.List;
 import java.util.Map;
 
 import in.android.storiez.R;
-import in.android.storiez.activities.CreateCardActivity;
-import in.android.storiez.activities.CreateQuestionActivity;
-import in.android.storiez.activities.MoreActivity;
-import in.android.storiez.activities.MultiPlayerActivity;
-import in.android.storiez.activities.ProfileActivity;
-import in.android.storiez.activities.TakePictureActivity;
 import in.android.storiez.adapter.QuestionAdapter;
 import in.android.storiez.base.BaseFragment;
 import in.android.storiez.data.local.model.ContentTopic;
-import in.android.storiez.databinding.ActivityMainBinding;
 import in.android.storiez.databinding.FragmentHomeMainBinding;
 import in.android.storiez.items.QuestionItem;
+import in.android.storiez.ui.home.post.CommentsBottomSheet;
 import in.android.storiez.utils.API_Details;
 import in.android.storiez.utils.ApiProcessing;
 import in.android.storiez.utils.BasicUtils;
@@ -97,6 +78,13 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
     boolean isDataChanged = false;
 
+
+    int likeDislikeItemPos = -1;
+
+    int currentPostItemPos = -1;
+
+    String currentPostId = null;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,13 +113,57 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
                     Log.d(TAG, "onPageSelected: requesting volley ");
 //                    fetchMoreData();
                 }
+
+
+                if (adapter != null) {
+                    QuestionItem item = adapter.getPostItemByPos(position);
+                    currentPostItemPos = position;
+                    currentPostId = item.getId();
+                    viewModel.getPostMetaInfo(currentPostId);
+
+                    Log.d(TAG, "onPageSelected: post item data " + item);
+                }
             }
         });
 
         init();
 
+//        viewModel.getPostsObservable().observe(getViewLifecycleOwner(), posts -> {
+//
+//            if (posts != null) {
+//                Log.d(TAG, "onViewCreated: we got some post data " + posts);
+//            } else {
+//                Log.d(TAG, "onViewCreated: we got no post data ");
+//            }
+//
+//        });
+//
+//
+//        viewModel.getPosts();
+
         topicsAdapter = new TopicsAdapter(topics);
         binding.topicRecyclerView.setAdapter(topicsAdapter);
+
+
+        viewModel.getPostMetaInfoObservable().observe(getViewLifecycleOwner(), postMetaInfo -> {
+
+            if (postMetaInfo != null) {
+
+                if (currentPostItemPos != -1) {
+                    if (currentPostId != null && currentPostId.equals(postMetaInfo.getPostId())) {
+                        if (adapter != null) {
+                            adapter.updatePostMetaInfo(currentPostItemPos, postMetaInfo);
+                            currentPostId = null;
+                            currentPostItemPos = -1;
+                        } else {
+                            currentPostId = null;
+                            currentPostItemPos = -1;
+                        }
+                    }
+                }
+            }
+
+        });
 
 
         viewModel.getContentTopicsObservable().observe(getViewLifecycleOwner(), topics -> {
@@ -139,6 +171,47 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
                 Log.d(TAG, "onViewCreated: got some data ");
                 topicsAdapter.updateTopics(Utils.preProcessTopics(topics));
 
+            }
+        });
+
+        viewModel.getIsLikedSuccessObservable().observe(getViewLifecycleOwner(), isLiked -> {
+            if (isLiked) {
+                Log.d(TAG, "onViewCreated: like a post successfully ");
+                Toast.makeText(requireContext(), "Liked Successfully", Toast.LENGTH_SHORT).show();
+
+                if (likeDislikeItemPos != -1) {
+                    if (adapter != null) {
+                        adapter.likePost(likeDislikeItemPos);
+                        likeDislikeItemPos = -1;
+                    } else {
+                        likeDislikeItemPos = -1;
+                    }
+                }
+            } else {
+                likeDislikeItemPos = -1;
+                Toast.makeText(requireContext(), "Retry", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onViewCreated: failed to Like post ");
+            }
+        });
+
+        viewModel.getRemoveSuccessObservable().observe(getViewLifecycleOwner(), isRemoved -> {
+
+            if (isRemoved) {
+                Log.d(TAG, "onViewCreated: remove a post successfully ");
+                Toast.makeText(requireContext(), "Removed Successfully", Toast.LENGTH_SHORT).show();
+
+                if (likeDislikeItemPos != -1) {
+                    if (adapter != null) {
+                        adapter.removeLikeFromPost(likeDislikeItemPos);
+                        likeDislikeItemPos = -1;
+                    } else {
+                        likeDislikeItemPos = -1;
+                    }
+                }
+            } else {
+                likeDislikeItemPos = -1;
+                Toast.makeText(requireContext(), "Retry", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onViewCreated: failed to remove post ");
             }
         });
 
@@ -182,9 +255,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
             @Override
             public void onDrawerClosed(View drawerView) {
                 Log.d(TAG, "onDrawerClosed: ");
-                if (isDataChanged){
+                if (isDataChanged) {
                     volleyGetQuestion();
-                    isDataChanged   = false;
+                    isDataChanged = false;
                 }
                 // No need to handle
             }
@@ -197,6 +270,40 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
         setUpListeners();
         languageCardSelectionSetup();
+
+
+        setUpMethodListeners();
+
+
+    }
+
+    private void setUpMethodListeners() {
+
+
+        adapter.setOnCommentPostClicked(question -> {
+
+            showCommentBottomSheet(question);
+        });
+
+        adapter.setOnLikePostClicked((question, pos) -> {
+            if (question.isPostLiked()) {
+                viewModel.removeLike(question.getId());
+            } else {
+                viewModel.likePost(question.getId());
+            }
+            likeDislikeItemPos = pos;
+        });
+
+        adapter.setOnSharePostClicked(question -> {
+
+        });
+
+    }
+
+    private void showCommentBottomSheet(QuestionItem question) {
+        CommentsBottomSheet bottomSheetDialog = CommentsBottomSheet.newInstance(question.getId());
+        bottomSheetDialog.setCancelable(true);
+        bottomSheetDialog.show(requireActivity().getSupportFragmentManager(), bottomSheetDialog.getTag());
 
     }
 
@@ -273,45 +380,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
         context = requireContext();
         questionItem = new QuestionItem();
         basicUtils = new BasicUtils(context);
-        initView();
+
         volleyGetQuestion();
 
-    }
-
-    private void initView() {
-
-//        videosViewPager = findViewById(R.id.MainViewPager);
-        //videosViewPager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-
-//        binding.home.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                volleyGetQuestion();
-//            }
-//        });
-//        binding.llProfile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(HomeActivity.this, ProfileActivity.class);
-//                startActivity(i);
-//            }
-//        });
-//        binding.llMore.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(HomeActivity.this, MoreActivity.class);
-//                startActivity(i);
-//            }
-//        });
-//        binding.llMultiplayer.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(HomeActivity.this, MultiPlayerActivity.class);
-//                startActivity(i);
-//            }
-//        });
-//
 
     }
 
@@ -389,31 +460,17 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
                             branches = ApiProcessing.GetQuestion.parseResponse(response);
                             adapter.addData(branches);
-                            //initView(questionItem);
-//
-//                            // Notify the adapter about the data change
-//                            adapter.notifyDataSetChanged();
-//                            if (branches.size() == 0) {
-//                                basicUtils.showCustomAlert("No Question present");
-//                                volleyGetQuestion();
-//                            }
+
                             details.setResponse(response.toString());
                             if (Constants.SUPER_USER)
                                 details.show();
-                            //pbDestination.setVisibility(View.GONE);
-//                            Log.i(TAG, "S_version response = " + loginItem.getDevice_id());
-                            // Log.i(TAG, "volleyGetQuestion : Response = " + response);
                             Log.i(TAG, "volleyGetQuestion : Response Length = " + branches.size());
 
-//                            Intent intent = new Intent(HomeFragment.this, MainActivity.class);
-//                            startActivity(intent);
-                            //finish();
 
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-//                        if (Constants.SUPER_USER)
-//                            details.show();
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -421,9 +478,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
                 details.setErrorResponse(error.toString());
                 if (Constants.SUPER_USER)
                     details.show();
-                //pbDestination.setVisibility(View.GONE);
-//                dialog.dismiss();
-                basicUtils.showCustomAlert("Timed Out!");
+
+                Toast.makeText(context, "Time Out!", Toast.LENGTH_SHORT).show();
+//                basicUtils.showCustomAlert("Timed Out!");
                 Log.e(TAG, "volleyGetQuestion : Error = " + error.toString());
             }
         }) {
@@ -431,105 +488,15 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
             public Map<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("device_id", deviceId);
+                headers.put("user_id", deviceId);
                 return headers;
             }
         };
         requestQueue.add(request);
 
-//        request.setRetryPolicy(
-//                new DefaultRetryPolicy(
-//                        DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 3,
-//                        0,  //Since Multiple bids are being placed if retry is hit as response is delayed but DB captures the bid
-//                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        //SApplication.getInstance().addToRequestQueue(request, "GetDestination");
+
     }
 
-    private void volleyQuestionResponse(String question_id, String gmae, String user_select, String correct) {
-        final API_Details details = new API_Details(context);
-        details.setAPI_Name("volleyGetQuestion");
-        // pbDestination.setVisibility(View.VISIBLE);
-        String deviceId = BasicUtils.getDeviceId(context);
-        String url = ApiProcessing.QuestionResponse.API_URL;
-        JSONObject object = ApiProcessing.QuestionResponse.constructObject(question_id, gmae, user_select, correct);
-        Log.i(TAG, "volleyQuestionResponse : URL = " + url);
-        Log.i(TAG, "volleyQuestionResponse : OBJECT = " + object.toString());
-        details.setAPI_URL(url);
-        details.setObject(object.toString());
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
-                url,
-                object,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        details.setResponse(response.toString());
-                        if (Constants.SUPER_USER)
-                            details.show();
-                        Log.i(TAG, "volleyPostStringRequest : Response = " + response);
-                        try {
-                            //questionItem = ApiProcessing.GetQuestion.parseResponse(response);
-                            details.setResponse(response.toString());
-//                            initView(questionItem);
-                            //pbDestination.setVisibility(View.GONE);
-//                            Log.i(TAG, "S_version response = " + loginItem.getDevice_id());
-                            // Log.i(TAG, "volleyGetQuestion : Response = " + response);
-                            Log.i(TAG, "volleyQuestionResponse : Response Length = " + questionItem.getQuestion_text());
-
-//                            Intent intent = new Intent(HomeFragment.this, MainActivity.class);
-//                            startActivity(intent);
-                            //finish();
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-//                        if (Constants.SUPER_USER)
-//                            details.show();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                details.setErrorResponse(error.toString());
-                if (Constants.SUPER_USER)
-                    details.show();
-                //pbDestination.setVisibility(View.GONE);
-//                dialog.dismiss();
-                // basicUtils.showCustomAlert("Timed Out!");
-                Log.e(TAG, "volleyQuestionResponse : Error = " + error.toString());
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("device_id", deviceId);
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-
-//            @Override
-//            protected Map<String, String> getParams()  {
-//                Map<String, String> params = new HashMap<>();
-//                params.put("question_id", question_id);
-//                params.put("game", gmae);
-//                params.put("user_select", user_select);
-//                params.put("correct", correct);
-//                return params;
-//            }
-        };
-        requestQueue.add(request);
-        //        request.setRetryPolicy(
-//                new DefaultRetryPolicy(
-//                        DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 3,
-//                        0,  //Since Multiple bids are being placed if retry is hit as response is delayed but DB captures the bid
-//                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        //SApplication.getInstance().addToRequestQueue(request, "GetDestination");
-    }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        requireActivity().getMenuInflater().inflate(R.menu.main_menu, menu);
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

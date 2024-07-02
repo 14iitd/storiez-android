@@ -23,6 +23,56 @@ public class QuestionItem {
     String image_url;
     String created_at;
 
+    boolean isPostLiked;
+
+    int postLikeCount;
+
+    int postCommentCount;
+
+    int postShareCount;
+
+    public boolean isPostLiked() {
+        return isPostLiked;
+    }
+
+    public void setPostLiked(boolean postLiked) {
+        isPostLiked = postLiked;
+    }
+
+    public int getPostLikeCount() {
+        return postLikeCount;
+    }
+
+    public void setPostLikeCount(int postLikeCount) {
+        this.postLikeCount = postLikeCount;
+    }
+
+    public int getPostCommentCount() {
+        return postCommentCount;
+    }
+
+    public void setPostCommentCount(int postCommentCount) {
+        this.postCommentCount = postCommentCount;
+    }
+
+    public int getPostShareCount() {
+        return postShareCount;
+    }
+
+    public void setPostShareCount(int postShareCount) {
+        this.postShareCount = postShareCount;
+    }
+
+    private PostMetaInfo postMetaInfo;
+
+    public PostMetaInfo getPostMetaInfo() {
+        return postMetaInfo;
+    }
+
+    public void setPostMetaInfo(PostMetaInfo postMetaInfo) {
+        this.postMetaInfo = postMetaInfo;
+    }
+
     public String getCreated_at() {
         return created_at;
     }
@@ -191,10 +241,10 @@ public class QuestionItem {
         return "QuestionItem{" +
                 "device_id='" + device_id + '\'' +
                 ", question_text='" + question_text + '\'' +
-                ", game='" + type + '\'' +
+                ", type='" + type + '\'' +
                 ", options=" + options +
                 ", correct_answer='" + correct_answer + '\'' +
-                ", answer_index='" + answer_index + '\'' +
+                ", answer_index=" + answer_index +
                 ", category='" + category + '\'' +
                 ", age='" + age + '\'' +
                 ", difficulty='" + difficulty + '\'' +
@@ -204,6 +254,16 @@ public class QuestionItem {
                 ", color='" + color + '\'' +
                 ", accuracy='" + accuracy + '\'' +
                 ", played='" + played + '\'' +
+                ", answer='" + answer + '\'' +
+                ", source='" + source + '\'' +
+                ", image_url='" + image_url + '\'' +
+                ", created_at='" + created_at + '\'' +
+                ", isPostLiked=" + isPostLiked +
+                ", postLikeCount=" + postLikeCount +
+                ", postCommentCount=" + postCommentCount +
+                ", postShareCount=" + postShareCount +
+                ", postMetaInfo=" + postMetaInfo +
+                ", image='" + image + '\'' +
                 '}';
     }
 }

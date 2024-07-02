@@ -6,6 +6,9 @@ import android.util.Log;
 import java.io.IOException;
 
 
+import in.android.storiez.utils.BasicUtils;
+import in.android.storiez.utils.StoriezApp;
+import in.android.storiez.utils.Utils;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -26,33 +29,24 @@ public class AuthInterceptor implements Interceptor {
         Request originalRequest = chain.request();
         Log.d(TAG, "intercept: ");
 
-//        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-//            FirebaseAuth.getInstance().getCurrentUser()
-//                    .getIdToken(false).addOnSuccessListener(result -> {
-//                        SocialMediaApp.getAppDataManager().setFirebaseAuthToken(result.getToken());
-//                        Log.d(TAG, "init: firebase auth token: " + result.getToken());
-//                    }).addOnFailureListener(e -> {
-//                        SocialMediaApp.getAppDataManager().setFirebaseAuthToken(null);
-//                    });
-//            authToken = SocialMediaApp.getAppDataManager().getFirebaseAuthToken();
-//            if (authToken == null) {
-//                Log.d(TAG, "intercept: auth token null");
-//                return chain.proceed(originalRequest);
-//            }
-//            Request modifiedRequest = originalRequest.newBuilder()
-//                    .header("Authorization", authToken)
-//                    .build();
-//            Log.d(TAG, "intercept: token attached to header");
-//            Log.d(TAG, "intercept: auth token " + authToken);
-//            //Log.d(TAG, "intercept: body " + modifiedRequest.body().toString());
-//            if (modifiedRequest.body() != null) {
-//                Buffer buffer = new Buffer();
-//                modifiedRequest.body().writeTo(buffer);
-//                String requestBody = buffer.readUtf8();
-//                Log.d(TAG, "intercept: Request Body: " + requestBody);
-//            }
-//            return chain.proceed(modifiedRequest);
-//        }
+        Request modifiedRequest = originalRequest.newBuilder()
+                .header("Authorization", "hey")
+//                .header("device_id", BasicUtils.getDeviceId(StoriezApp.getInstance()))
+                .header("device_id", "65845de0f3aac0d35e7d6172s")
+
+//                .header("user_id", BasicUtils.getDeviceId(StoriezApp.getInstance()))
+                .header("user_id", "12918hbwdh994")
+
+                .header("Content-Type", "application/json")
+                .build();
+
+
+        if (modifiedRequest.body() != null) {
+            Buffer buffer = new Buffer();
+            modifiedRequest.body().writeTo(buffer);
+            String requestBody = buffer.readUtf8();
+            Log.d(TAG, "intercept: Request Body: " + requestBody);
+        }
         return chain.proceed(originalRequest);
     }
 

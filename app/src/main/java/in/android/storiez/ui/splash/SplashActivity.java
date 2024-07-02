@@ -8,6 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
@@ -67,6 +72,40 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+//        getViewBinding().fullscreenContent.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                // Create a zoom-in animation
+//                Animation zoomIn = new ScaleAnimation(
+//                        0.0f, 1.0f, // Start and end values for the X axis scaling
+//                        0.0f, 1.0f, // Start and end values for the Y axis scaling
+//                        Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
+//                        Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
+//                zoomIn.setInterpolator(new DecelerateInterpolator());
+//                zoomIn.setDuration(1000); // Duration of the animation
+//                zoomIn.setAnimationListener(new Animation.AnimationListener() {
+//                    @Override
+//                    public void onAnimationStart(Animation animation) {
+//                        Log.d(TAG, "onAnimationStart: animation is started yes ");
+//                    }
+//
+//                    @Override
+//                    public void onAnimationEnd(Animation animation) {
+//                        // You can add any actions you want to perform after the animation ends here
+//                    }
+//
+//                    @Override
+//                    public void onAnimationRepeat(Animation animation) {
+//                    }
+//                });
+//
+//                getViewBinding().fullscreenContent.startAnimation(zoomIn);
+//            }
+//        }, 0);
+
+
+
         init();
 
 
@@ -124,7 +163,10 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
                     details.show();
                 // pbDestination.setVisibility(View.GONE);
 //                dialog.dismiss();
-                basicUtils.showCustomAlert("Timed Out!");
+                Toast.makeText(SplashActivity.this, "Time Out", Toast.LENGTH_SHORT).show();
+//                basicUtils.showCustomAlert("Timed Out!");
+                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                finish();
                 Log.e(TAG, "volleyGetCityStateName : Error = " + error.toString());
             }
         }) {

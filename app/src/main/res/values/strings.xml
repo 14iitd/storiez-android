@@ -7,4 +7,17 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="poll">Poll</string>
+    <string name="status">Status</string>
+    <string name="flash_card">Flash Card</string>
+
+
+    <!--    Post Comment bottom sheet-->
+    <string name="be_kind_while_commenting">Be kind while commenting</string>
+    <string name="comment">Comment</string>
+    <string name="type_here">type here ...</string>
+    <string name="cancel">Cancel</string>
+    <string name="post">Post</string>
+
 </resources>
