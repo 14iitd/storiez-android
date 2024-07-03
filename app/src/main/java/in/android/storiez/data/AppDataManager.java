@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import in.android.storiez.data.local.model.ContentTopic;
+import in.android.storiez.data.local.model.PostType;
+import in.android.storiez.data.local.model.PostTypeUrls;
 import in.android.storiez.data.local.prefs.PrefManager;
 import in.android.storiez.data.remote.UserComments;
 import in.android.storiez.data.remote.api.ApiManager;
@@ -79,5 +81,9 @@ public class AppDataManager {
 
     public void getPostMetaInfo(String postId, MutableLiveData<PostMetaInfo> postMetaInfoMutableLiveData) {
     apiManager.getPostMetaInfo(postId, postMetaInfoMutableLiveData);
+    }
+
+    public void getCreationUrls(MutableLiveData<List<PostType>> postTypeUrlsMutableLiveData) {
+    apiManager.getCreationUrls(postTypeUrlsMutableLiveData);
     }
 }

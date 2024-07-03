@@ -139,11 +139,11 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
                         Log.d(TAG, "onNavigationItemSelected: home ");
                         break;
 
-                    case R.id.nav_search:
-                        selectedFragment = profileFragment;
-                        isOnHome = false;
-                        Log.d(TAG, "onNavigationItemSelected: search ");
-                        break;
+//                    case R.id.nav_search:
+//                        selectedFragment = profileFragment;
+//                        isOnHome = false;
+//                        Log.d(TAG, "onNavigationItemSelected: search ");
+//                        break;
 
                     case R.id.nav_create:
                         showCreateContentBottomSheet();
@@ -151,11 +151,11 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
                         Log.d(TAG, "onNavigationItemSelected: Create ");
                         return false;
 
-                    case R.id.nav_workspaces:
-                        selectedFragment = profileFragment;
-                        isOnHome = false;
-                        // Initialize NotificationFragment
-                        break;
+//                    case R.id.nav_workspaces:
+//                        selectedFragment = profileFragment;
+//                        isOnHome = false;
+//                        // Initialize NotificationFragment
+//                        break;
 
                     case R.id.nav_profile:
                         selectedFragment = profileFragment;

@@ -115,8 +115,7 @@ public class CommentsBottomSheet extends BottomSheetDialogFragment {
         View view = getView();
         if (view != null) {
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-            layoutParams.height = 100;
-            layoutParams.width = 200;
+            layoutParams.height = 1600;
             view.setLayoutParams(layoutParams);
         }
     }

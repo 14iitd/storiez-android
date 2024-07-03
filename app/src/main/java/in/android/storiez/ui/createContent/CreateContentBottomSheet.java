@@ -7,14 +7,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import in.android.storiez.R;
+import in.android.storiez.data.local.model.PostType;
 import in.android.storiez.data.remote.UserComments;
 import in.android.storiez.databinding.FragmentCommentsBottomSheetBinding;
 import in.android.storiez.databinding.FragmentCreateContentBinding;
@@ -29,10 +35,17 @@ public class CreateContentBottomSheet extends BottomSheetDialogFragment {
         return new CreateContentBottomSheet();
     }
 
+    CreateContentViewModel viewModel;
+
+    List<PostType> postTypes = new ArrayList<>();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.TransparentBottomSheetDialog);
+
+        viewModel = new ViewModelProvider(this).get(CreateContentViewModel.class);
+
     }
 
     @NonNull
@@ -54,6 +67,7 @@ public class CreateContentBottomSheet extends BottomSheetDialogFragment {
             bottomSheetDialog.setCanceledOnTouchOutside(true);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -61,26 +75,55 @@ public class CreateContentBottomSheet extends BottomSheetDialogFragment {
 //
 
 
+        viewModel.getPostTypeUrlsObservable().observe(getViewLifecycleOwner(), data -> {
+            if (data != null) {
+                postTypes = data;
+            }
+
+        });
+
+
+        viewModel.getCreationUrls();
+
         binding.statsFabBtn.setOnClickListener(v -> {
-            startActivity(new Intent(requireActivity(), CreateContentActivity.class));
+
+            String url = getUrlFromList("status");
+            Intent intent = new Intent(requireActivity(), CreateContentActivity.class);
+            intent.putExtra("url", url);
+            startActivity(intent);
             dismiss();
         });
 
 
         binding.flashFabBtn.setOnClickListener(v -> {
-            startActivity(new Intent(requireActivity(), CreateContentActivity.class));
+            String url = getUrlFromList("image");
+            Intent intent = new Intent(requireActivity(), CreateContentActivity.class);
+            intent.putExtra("url", url);
+            startActivity(intent);
             dismiss();
         });
 
         binding.createFabBtn.setOnClickListener(v -> {
-            startActivity(new Intent(requireActivity(), CreateContentActivity.class));
+            String url = getUrlFromList("poll");
 
+            Intent intent = new Intent(requireActivity(), CreateContentActivity.class);
+            intent.putExtra("url", url);
+            startActivity(intent);
             dismiss();
         });
 
 
-
         return binding.getRoot();
+    }
+
+    private String getUrlFromList(String status) {
+
+        for (PostType postType : postTypes) {
+            if (postType.getType().equals(status)) {
+                return postType.getUrl();
+            }
+        }
+        return null;
     }
 
 

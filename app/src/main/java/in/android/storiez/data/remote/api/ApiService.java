@@ -48,6 +48,8 @@ public interface ApiService {
     Call<ResponseBody> getPostMetaInfo(@Url String url, @Body RequestBody body);
 
 
+    @GET("storiez/post-types")
+    Call<ResponseBody> getCreationUrls();
 
 //    @POST
 //    Call<ResponseBody> likePost(@Url String url);

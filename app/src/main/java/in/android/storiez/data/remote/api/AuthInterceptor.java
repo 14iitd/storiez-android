@@ -31,11 +31,11 @@ public class AuthInterceptor implements Interceptor {
 
         Request modifiedRequest = originalRequest.newBuilder()
                 .header("Authorization", "hey")
-//                .header("device_id", BasicUtils.getDeviceId(StoriezApp.getInstance()))
-                .header("device_id", "65845de0f3aac0d35e7d6172s")
+                .header("device_id", BasicUtils.getDeviceId(StoriezApp.getInstance()))
+//                .header("device_id", "65845de0f3aac0d35e7d6172s")
 
-//                .header("user_id", BasicUtils.getDeviceId(StoriezApp.getInstance()))
-                .header("user_id", "12918hbwdh994")
+                .header("user_id", BasicUtils.getDeviceId(StoriezApp.getInstance()))
+//                .header("user_id", "12918hbwdh994")
 
                 .header("Content-Type", "application/json")
                 .build();

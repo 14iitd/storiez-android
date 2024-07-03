@@ -63,6 +63,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import in.android.storiez.data.local.model.ContentTopic;
+import in.android.storiez.data.local.model.PostType;
+import in.android.storiez.data.local.model.PostTypeUrls;
 import in.android.storiez.data.remote.UserComments;
 import in.android.storiez.data.remote.model.PostData;
 import in.android.storiez.items.PostMetaInfo;
@@ -207,8 +209,9 @@ public class ApiManager {
         String url = "https://playchat.live/like/api/v1/post/" + postId;
         Log.d(TAG, "likePost: url of post api " + url);
 
-        // Create the request body
-        String jsonBody = "{\"user_id\":\"21121qwqw\"}";
+        String userId = BasicUtils.getDeviceId(StoriezApp.getInstance());
+        String jsonBody = "{\"user_id\":\"" + userId + "\"}";
+
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonBody);
 
         // Make the API call
@@ -236,7 +239,9 @@ public class ApiManager {
     public void removeLike(String id, MutableLiveData<Boolean> removeLikeSuccess) {
         String url = "https://playchat.live/dislike/api/v1/post/" + id;
 
-        String jsonBody = "{\"user_id\":\"21121qwqw\"}";
+        String userId = BasicUtils.getDeviceId(StoriezApp.getInstance());
+        String jsonBody = "{\"user_id\":\"" + userId + "\"}";
+
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonBody);
 
         apiService.removeLike(url, body)
@@ -413,7 +418,9 @@ public class ApiManager {
 
         String url = "https://playchat.live/haslike/api/v1/post/" + postId;
 
-        String jsonBody = "{\"user_id\":\"21121qwqw\"}";
+        String userId = BasicUtils.getDeviceId(StoriezApp.getInstance());
+        String jsonBody = "{\"user_id\":\"" + userId + "\"}";
+
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonBody);
 
         apiService.getPostMetaInfo(url, body)
@@ -432,6 +439,7 @@ public class ApiManager {
                                 postMetaInfo.setShareCount(jsonObject.getInt("total_share"));
                                 postMetaInfo.setPostId(postId);
 
+                                Log.d(TAG, "onResponse: we got meta info of post "+postMetaInfo);
                                 postMetaInfoMutableLiveData.postValue(postMetaInfo);
                                 Log.d(TAG, "onResponse: we got post meta info of " + postId);
                             } catch (Exception e) {
@@ -450,5 +458,43 @@ public class ApiManager {
                         Log.d(TAG, "onFailure: in getting post meta info " + t);
                     }
                 });
+    }
+
+    public void getCreationUrls(MutableLiveData<List<PostType>> postTypeUrlsMutableLiveData) {
+        apiService.getCreationUrls().enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        String jsonResponse = response.body().string();
+                        Gson gson = new Gson();
+                        PostTypeUrls postTypeUrlsResponse = gson.fromJson(jsonResponse, PostTypeUrls.class);
+                        if (postTypeUrlsResponse != null) {
+                            Log.d(TAG, "onResponse: got creation categories successfully ");
+                            postTypeUrlsMutableLiveData.setValue(postTypeUrlsResponse.getData());
+                        } else {
+                            postTypeUrlsMutableLiveData.setValue(null);
+                            // Handle the case where parsing returns null
+                            Log.d(TAG, "onResponse: creation categories are null ");
+                        }
+                    } catch (Exception e) {
+                        postTypeUrlsMutableLiveData.setValue(null);
+                        // Handle the exception
+                        Log.d(TAG, "onResponse: category creation "+e);
+                    }
+                } else {
+                    postTypeUrlsMutableLiveData.setValue(null);
+                    Log.d(TAG, "onResponse: creation categories failed unsuccessfull ");
+                    // Handle the case where response is not successful
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Handle the failure
+                Log.d(TAG, "onResponse: creation categories failed "+t);
+                postTypeUrlsMutableLiveData.setValue(null);
+            }
+        });
     }
 }

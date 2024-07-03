@@ -51,7 +51,7 @@ public class CreateContentActivity extends BaseActivity<ActivityCreateContentBin
 //        binding.webView.setWebViewClient(new WebViewClient());
 
         // Get the URL from the intent
-        String url = "http://www.youtube.com/";
+        String url = getIntent().getStringExtra("url");
 
         // Load the URL in the WebView
         if (url != null) {

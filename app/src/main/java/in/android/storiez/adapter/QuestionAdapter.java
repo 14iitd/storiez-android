@@ -1,6 +1,7 @@
 package in.android.storiez.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,9 +154,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
                     webView.loadUrl(questionItem.getSource());
                     webView.getSettings().setJavaScriptEnabled(true);
                 }
-                likeCount.setText(String.valueOf(questionItem.getPostLikeCount()));
-                commentCount.setText(String.valueOf(questionItem.getPostCommentCount()));
-                shareCount.setText(String.valueOf(questionItem.getPostShareCount()));
+                likeCount.setText(String.valueOf(questionItem.getPostMetaInfo().getLikesCount()));
+                commentCount.setText(String.valueOf(questionItem.getPostMetaInfo().getCommentsCount()));
+                shareCount.setText(String.valueOf(questionItem.getPostMetaInfo().getShareCount()));
             } else {
                 // Partial bind
                 switch (payload.toString()) {
@@ -171,10 +172,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
                         break;
 
                     case "meta":
-                        likeCount.setText(String.valueOf(questionItem.getPostLikeCount()));
+                        likeCount.setText(String.valueOf(questionItem.getPostMetaInfo().getLikesCount()));
                         heartImg.setImageResource(questionItem.isPostLiked() ? R.drawable.heart_filled_icon : R.drawable.heart_icon);
-                        commentCount.setText(String.valueOf(questionItem.getPostCommentCount()));
-                        shareCount.setText(String.valueOf(questionItem.getPostShareCount()));
+                        commentCount.setText(String.valueOf(questionItem.getPostMetaInfo().getCommentsCount()));
+                        shareCount.setText(String.valueOf(questionItem.getPostMetaInfo().getShareCount()));
+                        Log.d("TAG", "bind: value of particular post is id ");
                 }
             }
         }
