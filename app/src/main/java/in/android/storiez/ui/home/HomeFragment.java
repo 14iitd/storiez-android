@@ -85,7 +85,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
     String currentPostId = null;
 
-    String postId = null;
+    String sharePostId = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
                 // Check if the user has reached the 5th item
                 if (position == adapter.getItemCount() - 1) {
                     // Fetch more data from the API and add it to your adapter
-                    volleyGetQuestion();
+                    volleyGetQuestion(false);
                     Log.d(TAG, "onPageSelected: requesting volley ");
 //                    fetchMoreData();
                 }
@@ -127,12 +127,10 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
         });
 
 
-        postId = requireActivity().getIntent().getStringExtra(HomeActivity.EXTRAS_SHARED_POST_ID);
-
+        sharePostId = requireActivity().getIntent().getStringExtra(HomeActivity.EXTRAS_SHARED_POST_ID);
 
 
         init();
-
 
 
         topicsAdapter = new TopicsAdapter(topics);
@@ -250,7 +248,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
             public void onDrawerClosed(View drawerView) {
                 Log.d(TAG, "onDrawerClosed: ");
                 if (isDataChanged) {
-                    volleyGetQuestion();
+                    volleyGetQuestion(true);
                     isDataChanged = false;
                 }
                 // No need to handle
@@ -303,9 +301,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
         shareIntent.putExtra(Intent.EXTRA_TEXT, url);
         startActivity(Intent.createChooser(shareIntent, "Share post using"));
     }
-
-
-
 
 
     private void showCommentBottomSheet(QuestionItem question) {
@@ -389,7 +384,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
         questionItem = new QuestionItem();
         basicUtils = new BasicUtils(context);
 
-        volleyGetQuestion();
+        volleyGetQuestion(false);
 
 
     }
@@ -399,14 +394,13 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
         if (binding != null) {
             if (binding.MainViewPager != null) {
-                volleyGetQuestion();
+                volleyGetQuestion(false);
                 binding.MainViewPager.setCurrentItem(0, true);
             }
         }
     }
 
-    public void volleyGetQuestion() {
-
+    public void volleyGetQuestion(boolean isTopicsSelectionUpdated) {
 
 
         final API_Details details = new API_Details(context);
@@ -454,11 +448,12 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
 
         Log.i(TAG, "volleyGetQuestion : URL = " + url);
-        Log.d(TAG, "volleyGetQuestion: hitting the url but post id "+postId);
-        if (postId != null) {
+        Log.d(TAG, "volleyGetQuestion: hitting the url but post id " + sharePostId);
+        if (sharePostId != null) {
+            isTopicsSelectionUpdated = true;
+            Log.d(TAG, "volleyGetQuestion: hitting the sharedPostId " + baseUrl + "?id=" + sharePostId);
+            details.setAPI_URL(baseUrl + "?id=" + sharePostId);
 
-            Log.d(TAG, "volleyGetQuestion: hitting the sharedPostId "+baseUrl+"?id="+postId);
-            details.setAPI_URL(baseUrl+"?id="+postId);
         } else {
             Log.d(TAG, "volleyGetQuestion: hitting the unsharedPost ");
             details.setAPI_URL(url);
@@ -466,6 +461,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
+        boolean finalIsTopicsSelectionUpdated = isTopicsSelectionUpdated;
         final JsonArrayRequest request = new JsonArrayRequest(
                 Request.Method.GET,
                 url,
@@ -477,13 +473,19 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
                         try {
 
                             branches = ApiProcessing.GetQuestion.parseResponse(response);
-                            adapter.addData(branches);
+
+                            if (finalIsTopicsSelectionUpdated) {
+                                adapter.addDataToStarting(branches);
+                                Log.d(TAG, "onResponse: adding response to starting ");
+                            } else {
+                                adapter.addData(branches);
+                                Log.d(TAG, "onResponse: adding response to last ");
+                            }
 
                             details.setResponse(response.toString());
                             if (Constants.SUPER_USER)
                                 details.show();
                             Log.i(TAG, "volleyGetQuestion : Response Length = " + branches.size());
-
 
                         } catch (Exception e) {
                             e.printStackTrace();

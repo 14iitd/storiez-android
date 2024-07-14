@@ -84,7 +84,7 @@ public class CommentsBottomSheet extends BottomSheetDialogFragment {
             }
         });
 
-
+        Log.d(TAG, "onCreateView: triger the api for "+postId);
         viewModel.getPostComments(postId);
 
         binding.commentInputLayout.setEndIconOnClickListener(v -> {
