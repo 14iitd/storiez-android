@@ -43,6 +43,12 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
         notifyDataSetChanged();
     }
 
+    public void addDataToStarting(List<QuestionItem> newData) {
+        questionItems.addAll(0, newData);
+        notifyDataSetChanged();
+    }
+
+
     private OnLikePostClicked onLikePostClicked;
     private OnSharePostClicked onSharePostClicked;
     private OnCommentPostClicked onCommentPostClicked;
@@ -102,6 +108,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
 
         if (currentPostItemPos < questionItems.size()) {
             questionItems.get(currentPostItemPos).setPostMetaInfo(postMetaInfo);
+            questionItems.get(currentPostItemPos).setPostCommentCount(postMetaInfo.getCommentsCount());
+            questionItems.get(currentPostItemPos).setPostShareCount(postMetaInfo.getShareCount());
+            questionItems.get(currentPostItemPos).setPostLikeCount(postMetaInfo.getLikesCount());
+
             notifyItemChanged(currentPostItemPos, "meta");
         }
     }

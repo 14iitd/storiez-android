@@ -269,9 +269,9 @@ public class ApiManager {
 
     public void getPostComments(String postId, MutableLiveData<List<UserComments>> userCommentsMutableLiveData) {
 
-//        String url = "http://playchat.live/post/" + postId + "/replies";
+        String url = "http://playchat.live/post/" + postId + "/replies";
 
-        String url = "http://playchat.live/post/65b64f3350d507328fafa2ee/replies";
+//        String url = "http://playchat.live/post/65b64f3350d507328fafa2ee/replies";
 
 
         apiService.getPostComments(url)
@@ -385,7 +385,7 @@ public class ApiManager {
 
     public void addComment(String postId, UserComments commentObj, MutableLiveData<UserComments> userCommentMutableLiveData) {
 
-        String url = "http://playchat.live/post/" + postId + "/replies";
+        String url = "https://playchat.live/post/" + postId + "/replies";
 
         // Create the JSON body
         String jsonBody = "{\"text\":\"" + commentObj.getText() + "\"}";

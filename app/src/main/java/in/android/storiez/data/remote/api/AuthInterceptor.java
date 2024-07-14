@@ -40,6 +40,7 @@ public class AuthInterceptor implements Interceptor {
                 .header("Content-Type", "application/json")
                 .build();
 
+        Log.d(TAG, "intercept: auth interceptor device id and user id "+BasicUtils.getDeviceId(StoriezApp.getInstance())+" "+BasicUtils.getDeviceId(StoriezApp.getInstance())   );
 
         if (modifiedRequest.body() != null) {
             Buffer buffer = new Buffer();
