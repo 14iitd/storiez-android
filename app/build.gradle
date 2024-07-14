@@ -59,4 +59,8 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.14.2'
 
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+    implementation 'io.branch.sdk.android:library:5.8.0' // Check for latest version before hard-coding
+
+
 }

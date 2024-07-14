@@ -5,7 +5,6 @@ import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -41,7 +40,7 @@ import java.util.Map;
 
 import in.android.storiez.R;
 import in.android.storiez.databinding.ActivityMainBinding;
-import in.android.storiez.adapter.QuestionAdapter;
+import in.android.storiez.ui.home.QuestionAdapter;
 import in.android.storiez.items.QuestionItem;
 import in.android.storiez.utils.API_Details;
 import in.android.storiez.utils.ApiProcessing;
