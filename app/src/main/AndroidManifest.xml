@@ -123,6 +123,17 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="storieztoday.app.link" />
+                <data android:scheme="https" android:host="dby4d-alternate.app.link" />
+                <data android:scheme="https" android:host="dby4d.test-app.link" />
+                <data android:scheme="https" android:host="dby4d-alternate.test-app.link" />
+            </intent-filter>
+
         </activity>
 
     </application>

@@ -1,4 +1,4 @@
-package in.android.storiez.adapter;
+package in.android.storiez.ui.home;
 
 import android.content.Context;
 import android.util.Log;
@@ -154,9 +154,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
                     webView.loadUrl(questionItem.getSource());
                     webView.getSettings().setJavaScriptEnabled(true);
                 }
-                likeCount.setText(String.valueOf(questionItem.getPostMetaInfo().getLikesCount()));
-                commentCount.setText(String.valueOf(questionItem.getPostMetaInfo().getCommentsCount()));
-                shareCount.setText(String.valueOf(questionItem.getPostMetaInfo().getShareCount()));
+                if (questionItem.getPostMetaInfo() !=null){
+                    likeCount.setText(String.valueOf(questionItem.getPostMetaInfo().getLikesCount()));
+                    commentCount.setText(String.valueOf(questionItem.getPostMetaInfo().getCommentsCount()));
+                    shareCount.setText(String.valueOf(questionItem.getPostMetaInfo().getShareCount()));
+                }
             } else {
                 // Partial bind
                 switch (payload.toString()) {

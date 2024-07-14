@@ -5,6 +5,7 @@ import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -38,6 +40,10 @@ import in.android.storiez.utils.ApiProcessing;
 import in.android.storiez.utils.BasicUtils;
 import in.android.storiez.utils.Constants;
 import in.android.storiez.utils.StoriezApp;
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
 
 public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
     @Override
@@ -72,44 +78,37 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-//        getViewBinding().fullscreenContent.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                // Create a zoom-in animation
-//                Animation zoomIn = new ScaleAnimation(
-//                        0.0f, 1.0f, // Start and end values for the X axis scaling
-//                        0.0f, 1.0f, // Start and end values for the Y axis scaling
-//                        Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
-//                        Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
-//                zoomIn.setInterpolator(new DecelerateInterpolator());
-//                zoomIn.setDuration(1000); // Duration of the animation
-//                zoomIn.setAnimationListener(new Animation.AnimationListener() {
-//                    @Override
-//                    public void onAnimationStart(Animation animation) {
-//                        Log.d(TAG, "onAnimationStart: animation is started yes ");
-//                    }
-//
-//                    @Override
-//                    public void onAnimationEnd(Animation animation) {
-//                        // You can add any actions you want to perform after the animation ends here
-//                    }
-//
-//                    @Override
-//                    public void onAnimationRepeat(Animation animation) {
-//                    }
-//                });
-//
-//                getViewBinding().fullscreenContent.startAnimation(zoomIn);
-//            }
-//        }, 0);
-
-
-
         init();
 
 
-        volleyGetLogin();
+        Intent intent = getIntent();
+        if (intent != null && Intent.ACTION_VIEW.equals(intent.getAction())) {
+            Uri uri = intent.getData();
+            if (uri != null) {
+                Log.d(TAG, "onCreate: url we got from link "+uri.getLastPathSegment());
+                Log.d(TAG, "onCreate: url we got from link string "+uri.toString());
+
+                // Extract postId from the URI path
+                String postId = uri.getLastPathSegment();
+                // Use postId to navigate or perform actions in your app
+                // Example: navigate to a specific post based on postId
+
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                homeIntent.putExtra(HomeActivity.EXTRAS_SHARED_POST_ID, postId);
+                startActivity(homeIntent);
+                finish();
+            }
+        } else {
+
+            volleyGetLogin();
+        }
+        
+
+
+
+
+
+
     }
 
     private void init() {
@@ -185,5 +184,38 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
 //                        0,  //Since Multiple bids are being placed if retry is hit as response is delayed but DB captures the bid
 //                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         //SApplication.getInstance().addToRequestQueue(request, "GetDestination");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+//        handleDynamicLink(intent);
+
+        this.setIntent(intent);
+        if (intent != null && intent.hasExtra("branch_force_new_session") && intent.getBooleanExtra("branch_force_new_session", false)) {
+            Branch.sessionBuilder(this).withCallback(new Branch.BranchReferralInitListener() {
+                @Override
+                public void onInitFinished(JSONObject referringParams, BranchError error) {
+                    if (error != null) {
+                        Log.d(TAG, "onInitFinished: branch tester " + error.getMessage());
+                        Log.e("BranchSDK_Tester", error.getMessage());
+                    } else if (referringParams != null) {
+                        Log.i("BranchSDK_Tester", referringParams.toString());
+                        Log.d(TAG, "onInitFinished: branch tester params " + referringParams.toString());
+                    } else {
+                        Log.d(TAG, "onInitFinished: branch tester null");
+                    }
+                }
+            }).reInit();
+        }
     }
 }

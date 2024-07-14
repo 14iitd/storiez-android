@@ -1,6 +1,7 @@
 package in.android.storiez.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 
 import in.android.storiez.R;
-import in.android.storiez.adapter.QuestionAdapter;
 import in.android.storiez.base.BaseFragment;
 import in.android.storiez.data.local.model.ContentTopic;
 import in.android.storiez.databinding.FragmentHomeMainBinding;
@@ -85,6 +85,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
     String currentPostId = null;
 
+    String postId = null;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,8 +98,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        Log.d(TAG, "onViewCreated: home fragment");
 
         adapter = new QuestionAdapter(context); // Replace YourPagerAdapter with your actual adapter
         binding.MainViewPager.setAdapter(adapter);
@@ -126,20 +126,14 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
             }
         });
 
+
+        postId = requireActivity().getIntent().getStringExtra(HomeActivity.EXTRAS_SHARED_POST_ID);
+
+
+
         init();
 
-//        viewModel.getPostsObservable().observe(getViewLifecycleOwner(), posts -> {
-//
-//            if (posts != null) {
-//                Log.d(TAG, "onViewCreated: we got some post data " + posts);
-//            } else {
-//                Log.d(TAG, "onViewCreated: we got no post data ");
-//            }
-//
-//        });
-//
-//
-//        viewModel.getPosts();
+
 
         topicsAdapter = new TopicsAdapter(topics);
         binding.topicRecyclerView.setAdapter(topicsAdapter);
@@ -296,9 +290,23 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
         adapter.setOnSharePostClicked(question -> {
 
+
+            sharePost(question.getId());
         });
 
     }
+
+    private void sharePost(String postId) {
+        String url = "https://storieztoday.app.link/" + postId;  // Use the postId parameter here
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+        startActivity(Intent.createChooser(shareIntent, "Share post using"));
+    }
+
+
+
+
 
     private void showCommentBottomSheet(QuestionItem question) {
         CommentsBottomSheet bottomSheetDialog = CommentsBottomSheet.newInstance(question.getId());
@@ -399,6 +407,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
     public void volleyGetQuestion() {
 
+
+
         final API_Details details = new API_Details(context);
         details.setAPI_Name("volleyGetQuestion");
 
@@ -444,7 +454,15 @@ public class HomeFragment extends BaseFragment<FragmentHomeMainBinding> {
 
 
         Log.i(TAG, "volleyGetQuestion : URL = " + url);
-        details.setAPI_URL(url);
+        Log.d(TAG, "volleyGetQuestion: hitting the url but post id "+postId);
+        if (postId != null) {
+
+            Log.d(TAG, "volleyGetQuestion: hitting the sharedPostId "+baseUrl+"?id="+postId);
+            details.setAPI_URL(baseUrl+"?id="+postId);
+        } else {
+            Log.d(TAG, "volleyGetQuestion: hitting the unsharedPost ");
+            details.setAPI_URL(url);
+        }
 
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
