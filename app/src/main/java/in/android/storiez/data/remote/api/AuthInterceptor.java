@@ -48,7 +48,7 @@ public class AuthInterceptor implements Interceptor {
             String requestBody = buffer.readUtf8();
             Log.d(TAG, "intercept: Request Body: " + requestBody);
         }
-        return chain.proceed(originalRequest);
+        return chain.proceed(modifiedRequest);
     }
 
 
