@@ -85,7 +85,7 @@ public class CreateContentBottomSheet extends BottomSheetDialogFragment {
 
         viewModel.getCreationUrls();
 
-        binding.statsFabBtn.setOnClickListener(v -> {
+        binding.createFabBtn.setOnClickListener(v -> {
 
             String url = getUrlFromList("status");
             Intent intent = new Intent(requireActivity(), CreateContentActivity.class);
@@ -103,7 +103,7 @@ public class CreateContentBottomSheet extends BottomSheetDialogFragment {
             dismiss();
         });
 
-        binding.createFabBtn.setOnClickListener(v -> {
+        binding.statsFabBtn.setOnClickListener(v -> {
             String url = getUrlFromList("poll");
 
             Intent intent = new Intent(requireActivity(), CreateContentActivity.class);
